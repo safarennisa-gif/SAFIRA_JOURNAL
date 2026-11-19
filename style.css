@@ -735,3 +735,118 @@ img[src*="bintang"],
 img[src*="kilauan"] {
     animation: safiraWarmTwinkle 4.5s ease-in-out infinite;
 }
+
+/* =========================================================
+   SMOOTH & WARM GLOW UNTUK LIST TUGAS & TABEL JADWAL
+   ========================================================= */
+
+/* 1. Baris Daftar Tugas (tugas.js) */
+#app-content .space-y-1\.5 > div.grid {
+    transition:
+        transform 0.24s var(--safira-ease-smooth),
+        box-shadow 0.24s var(--safira-ease-smooth),
+        filter 0.2s ease;
+    will-change: transform;
+}
+
+#app-content .space-y-1\.5 > div.grid:hover {
+    position: relative;
+    z-index: 2;
+    transform: translateY(-2px);
+    box-shadow:
+        0 10px 22px rgba(73, 43, 120, 0.07),
+        0 0 22px var(--safira-glow-warm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+/* Efek garis aksen kiri saat baris tugas di-hover */
+#app-content .space-y-1\.5 > div.grid > span.rounded-r-full {
+    transition: width 0.22s var(--safira-ease-smooth), box-shadow 0.22s ease;
+}
+
+#app-content .space-y-1\.5 > div.grid:hover > span.rounded-r-full {
+    width: 8px;
+}
+
+/* 2. Baris Tabel Jadwal Mingguan (jadwal.js) */
+#app-content tbody tr {
+    transition:
+        background-color 0.22s ease,
+        box-shadow 0.24s var(--safira-ease-smooth),
+        transform 0.24s var(--safira-ease-smooth);
+}
+
+#app-content tbody tr:hover {
+    position: relative;
+    z-index: 2;
+    transform: translateX(3px);
+    box-shadow:
+        inset 4px 0 0 rgba(8, 100, 247, 0.18),
+        inset 0 0 24px rgba(255, 232, 209, 0.5),
+        0 4px 14px rgba(73, 43, 120, 0.05);
+}
+
+/* 3. Tombol Aksi (Edit & Hapus) di dalam Daftar Tugas & Jadwal */
+#app-content .space-y-1\.5 > div.grid button:hover,
+#app-content tbody tr button:hover {
+    transform: translateY(-1.5px) scale(1.08);
+}
+/* =========================================================
+   CLEAR CONTAINER BORDERS (TEGAS NAMUN TETAP LEMBUT)
+   ========================================================= */
+
+:root {
+    --safira-container-line: rgba(126, 91, 183, 0.28);
+    --safira-container-line-hover: rgba(126, 91, 183, 0.44);
+    --safira-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+/* 1. Pembatas Sidebar dengan Area Konten */
+#app-sidebar.safira-sidebar {
+    border-right: 1.5px solid rgba(117, 100, 155, 0.28);
+}
+
+/* 2. Container Utama, Banner, Panel & Kartu Statistik */
+#app-content section[class*="border"],
+#app-content div[class*="border-white"],
+#login-container main[class*="border-white"],
+#login-container section[class*="border-white"] {
+    border-color: var(--safira-container-line) !important;
+    box-shadow:
+        var(--safira-inner-highlight),
+        0 6px 20px rgba(73, 43, 120, 0.06);
+}
+
+/* 3. Kartu Catatan, Target Belajar, & Jadwal Hari Ini */
+#app-content article {
+    border-color: var(--safira-container-line) !important;
+    box-shadow:
+        var(--safira-inner-highlight),
+        0 4px 16px rgba(73, 43, 120, 0.055);
+}
+
+#app-content article:hover,
+#app-content .cursor-pointer:hover {
+    border-color: var(--safira-container-line-hover) !important;
+}
+
+/* 4. Baris Daftar Tugas & Tabel Jadwal */
+#app-content .space-y-1\.5 > div.grid {
+    border-color: rgba(126, 91, 183, 0.24) !important;
+}
+
+#app-content .space-y-1\.5 > div.grid:hover {
+    border-color: var(--safira-container-line-hover) !important;
+}
+
+#app-content tbody tr {
+    border-bottom-color: rgba(126, 91, 183, 0.2) !important;
+}
+
+/* 5. Garis Input, Select & Textarea Sedikit Lebih Jelas */
+#app-content input,
+#app-content select,
+#app-content textarea,
+#login-container input {
+    border-color: rgba(126, 91, 183, 0.34);
+}
