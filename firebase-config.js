@@ -35,8 +35,10 @@ async function simpanSemuaDataKeCloud() {
             target: typeof daftarTarget !== "undefined" ? daftarTarget : [],
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
+        console.log("Data SAFIRA berhasil tersimpan ke Firestore.");
     } catch (error) {
         console.error("Gagal menyimpan ke Firestore:", error);
+        alert("Gagal menyimpan ke database Firebase: " + error.message);
     }
 }
 
