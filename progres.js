@@ -57,7 +57,7 @@ let hapusIndexTarget = -1;
 
 const PROGRES_ASSETS = {
     avatar: "aset/avatar.png",
-    hero: "aset/pastel-girl-3.png",
+    hero: "aset/pastel-girl-6.png",
     bukuHeader: "aset/buku-header.png",
     bukuKecil: "aset/buku-4.png",
     notebook: "aset/buku-8.png",

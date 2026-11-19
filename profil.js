@@ -13,7 +13,7 @@
 const PROFIL_ASSETS = {
     logo: "aset/buku-2.png",
     avatar: "aset/avatar.png",
-    hero: "aset/pastel-girl-6.png",
+    hero: "aset/pastel-girl-3.png",
 
     books: "aset/buku-header.png",
     booksSmall: "aset/buku-1.png",
