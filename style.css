@@ -648,3 +648,90 @@ textarea:hover:not(:disabled):not(:focus) {
 #app-content > * {
     animation: safiraPageEnter 0.28s var(--safira-ease-smooth) both;
 }
+
+/* =========================================================
+   SOFT & WARM GLOW LAYER (PALET WARNA TETAP ASLI)
+   ========================================================= */
+
+:root {
+    --safira-glow-warm: rgba(255, 232, 209, 0.58);
+    --safira-glow-cream: rgba(255, 245, 228, 0.72);
+    --safira-glow-blue: rgba(8, 100, 247, 0.28);
+}
+
+/* 1. Cahaya Hangat Halus di Banner Hero & Sidebar */
+.hero-gradient {
+    box-shadow:
+        0 10px 30px rgba(73, 43, 120, 0.06),
+        0 0 32px rgba(255, 232, 209, 0.42),
+        inset 0 0 28px rgba(255, 248, 236, 0.55) !important;
+}
+
+#app-sidebar.safira-sidebar {
+    box-shadow:
+        6px 0 28px rgba(71, 45, 124, 0.06),
+        2px 0 24px rgba(255, 232, 209, 0.32);
+}
+
+/* 2. Pendar Lembut pada Menu Sidebar yang Aktif & Hover */
+#app-sidebar .menu-item.is-active,
+#app-sidebar .menu-item.bg-brand-purple {
+    box-shadow:
+        0 8px 20px var(--safira-glow-blue),
+        0 0 18px rgba(255, 240, 224, 0.45) !important;
+}
+
+#app-sidebar .menu-item:hover:not(.is-active):not(.bg-brand-purple) {
+    box-shadow:
+        0 4px 16px rgba(255, 245, 228, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* 3. Warm Halo pada Kartu & Elemen Klik saat Hover */
+#app-content article:hover,
+#app-content .cursor-pointer:hover {
+    box-shadow:
+        0 12px 26px rgba(73, 43, 120, 0.08),
+        0 0 24px var(--safira-glow-warm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+/* 4. Pendar Lembut pada Tombol saat Hover */
+button:not(:disabled):hover {
+    box-shadow:
+        0 8px 20px rgba(73, 43, 120, 0.08),
+        0 0 18px var(--safira-glow-warm);
+}
+
+button[class*="bg-[#0864F7]"]:not(:disabled):hover,
+button[class*="bg-[#1D63DC]"]:not(:disabled):hover {
+    box-shadow:
+        0 8px 22px var(--safira-glow-blue),
+        0 0 20px rgba(255, 236, 214, 0.55);
+}
+
+/* 5. Input & Select Berpendar Hangat saat Aktif/Fokus */
+input:focus,
+select:focus,
+textarea:focus {
+    box-shadow:
+        0 0 0 3px rgba(220, 202, 247, 0.45),
+        0 0 18px var(--safira-glow-cream) !important;
+}
+
+/* 6. Pendar Bintang & Kilauan Dekorasi (Sangat Halus) */
+@keyframes safiraWarmTwinkle {
+    0%, 100% {
+        filter: drop-shadow(0 0 4px rgba(255, 236, 186, 0.55));
+        opacity: 0.82;
+    }
+    50% {
+        filter: drop-shadow(0 0 9px rgba(255, 226, 168, 0.9));
+        opacity: 1;
+    }
+}
+
+img[src*="bintang"],
+img[src*="kilauan"] {
+    animation: safiraWarmTwinkle 4.5s ease-in-out infinite;
+}
