@@ -174,7 +174,7 @@
                     </div>
 
                     <!-- Tombol Keluar -->
-                    <a href="javascript:void(0)" onclick="showLanding(); closeSafiraSidebar()" class="flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 hover:text-red-600 rounded-2xl font-semibold transition-colors group relative z-20 text-[15px]">
+                    <a href="javascript:void(0)" onclick="logout(); closeSafiraSidebar()" class="flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 hover:text-red-600 rounded-2xl font-semibold transition-colors group relative z-20 text-[15px]">
                         <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center text-base group-hover:text-red-600"></i> Keluar
                     </a>
                 </div>
@@ -199,6 +199,12 @@
     <script src="profil.js"></script>
     <script src="login.js"></script>
     <script src="realtime.js"></script>
+
+    <!-- Firebase SDK (Compat) & Penghubung SAFIRA -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="firebase-sync.js"></script>
 
     <script>
         const SAFIRA_ROUTE_RENDERERS = {
