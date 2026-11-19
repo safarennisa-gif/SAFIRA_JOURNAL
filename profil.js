@@ -307,7 +307,7 @@ function renderProfilHero() {
                 <img
                     src="${PROFIL_ASSETS.hero}"
                     alt="Ilustrasi karakter SAFIRA"
-                    class="h-[115%] w-full object-contain object-bottom"
+                    class="h-[100%] w-full object-contain object-bottom"
                 >
 
             </div>
