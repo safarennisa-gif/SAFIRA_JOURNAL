@@ -8,60 +8,63 @@
 // 1. STATE MANAGEMENT & DATA CATATAN
 // ============================================================
 
+function buatTanggalCatatan(offsetHari = 0) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetHari);
+    return {
+        tanggal: d.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+        timestamp: d.getTime()
+    };
+}
+
 let daftarCatatan = [
     {
         judul: "Dasar HTML & CSS",
         matkul: "Desain Web",
         matkul_val: "1",
         isi: "Struktur halaman HTML dan dasar CSS untuk mengatur tampilan website.",
-        tanggal: "12 Okt 2026",
         warna: "pink",
-        timestamp: new Date(2026, 9, 12).getTime()
+        ...buatTanggalCatatan(-1)
     },
     {
         judul: "Memori dan Perhatian",
         matkul: "Psikologi Kognitif",
         matkul_val: "2",
         isi: "Ringkasan proses penyimpanan informasi dan pemusatan perhatian.",
-        tanggal: "11 Okt 2026",
         warna: "indigo",
-        timestamp: new Date(2026, 9, 11).getTime()
+        ...buatTanggalCatatan(-2)
     },
     {
         judul: "Langkah Pemecahan Masalah",
         matkul: "Strategi Pemecahan Masalah",
         matkul_val: "3",
         isi: "Memahami masalah, menyusun rencana, dan mengevaluasi hasil.",
-        tanggal: "10 Okt 2026",
         warna: "orange",
-        timestamp: new Date(2026, 9, 10).getTime()
+        ...buatTanggalCatatan(-3)
     },
     {
         judul: "Layout dengan Flexbox",
         matkul: "Desain Web",
         matkul_val: "1",
         isi: "Mengatur posisi elemen, jarak, dan perataan pada halaman web.",
-        tanggal: "9 Okt 2026",
         warna: "indigo",
-        timestamp: new Date(2026, 9, 9).getTime()
+        ...buatTanggalCatatan(-4)
     },
     {
         judul: "Persepsi dan Pengolahan Informasi",
         matkul: "Psikologi Kognitif",
         matkul_val: "2",
         isi: "Catatan tentang cara memahami dan mengolah informasi dari lingkungan.",
-        tanggal: "8 Okt 2026",
         warna: "pink",
-        timestamp: new Date(2026, 9, 8).getTime()
+        ...buatTanggalCatatan(-5)
     },
     {
         judul: "Evaluasi Solusi",
         matkul: "Strategi Pemecahan Masalah",
         matkul_val: "3",
         isi: "Membandingkan alternatif dan menilai kesesuaian solusi yang dipilih.",
-        tanggal: "7 Okt 2026",
         warna: "orange",
-        timestamp: new Date(2026, 9, 7).getTime()
+        ...buatTanggalCatatan(-6)
     }
 ];
 

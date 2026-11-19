@@ -25,7 +25,16 @@ const TUGAS_ASSETS = {
 
 // Tanggal acuan mengikuti tanggal pada desain referensi.
 // Ubah nilai ini jika ingin menggunakan tanggal operasional aktual.
-const TUGAS_TANGGAL_ACUAN = "2026-10-13";
+function formatISO(offsetHari = 0) {
+    const d = new Date();
+    d.setDate(d.getDate() + offsetHari);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
+const TUGAS_TANGGAL_ACUAN = formatISO(0);
 const TUGAS_PER_HALAMAN = 5;
 
 let daftarTugas = [
@@ -33,7 +42,7 @@ let daftarTugas = [
         judul: "Rancangan Website",
         matkul: "Desain Web",
         matkul_val: "1",
-        deadline: "2026-10-14",
+        deadline: formatISO(1), // Besok
         jam: "23:59",
         status: "Dikerjakan",
         deskripsi: "Membuat wireframe dan mockup visual website jurnal akademik."
@@ -42,7 +51,7 @@ let daftarTugas = [
         judul: "Ringkasan Memori",
         matkul: "Psikologi Kognitif",
         matkul_val: "2",
-        deadline: "2026-10-15",
+        deadline: formatISO(2), // 2 hari lagi
         jam: "23:59",
         status: "Belum Mulai",
         deskripsi: "Membuat ringkasan bab 4 tentang proses memori jangka pendek dan panjang."
@@ -51,7 +60,7 @@ let daftarTugas = [
         judul: "Analisis Kasus",
         matkul: "Strategi Pemecahan Masalah",
         matkul_val: "3",
-        deadline: "2026-10-16",
+        deadline: formatISO(3), // 3 hari lagi
         jam: "23:59",
         status: "Belum Mulai",
         deskripsi: "Menganalisis studi kasus 2 dan menentukan langkah pemecahan masalah."
@@ -60,7 +69,7 @@ let daftarTugas = [
         judul: "Latihan Layout CSS",
         matkul: "Desain Web",
         matkul_val: "1",
-        deadline: "2026-10-20",
+        deadline: formatISO(7), // 7 hari lagi
         jam: "23:59",
         status: "Dikerjakan",
         deskripsi: "Mengerjakan latihan Grid dan Flexbox pada modul 3."
@@ -69,7 +78,7 @@ let daftarTugas = [
         judul: "Rangkuman Persepsi",
         matkul: "Psikologi Kognitif",
         matkul_val: "2",
-        deadline: "2026-10-12",
+        deadline: formatISO(-1), // Kemarin (Selesai)
         jam: "23:59",
         status: "Selesai",
         deskripsi: "Menyusun rangkuman materi persepsi visual."
@@ -78,64 +87,10 @@ let daftarTugas = [
         judul: "Latihan Form HTML",
         matkul: "Desain Web",
         matkul_val: "1",
-        deadline: "2026-10-21",
+        deadline: formatISO(-2),
         jam: "23:59",
         status: "Selesai",
         deskripsi: "Membuat formulir pendaftaran sederhana menggunakan elemen HTML."
-    },
-    {
-        judul: "Review Materi Atensi",
-        matkul: "Psikologi Kognitif",
-        matkul_val: "2",
-        deadline: "2026-10-22",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Mempelajari kembali materi atensi dan faktor yang memengaruhinya."
-    },
-    {
-        judul: "Studi Kasus Kelompok",
-        matkul: "Strategi Pemecahan Masalah",
-        matkul_val: "3",
-        deadline: "2026-10-23",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Menyelesaikan analisis studi kasus bersama kelompok."
-    },
-    {
-        judul: "Praktik CSS Responsive",
-        matkul: "Desain Web",
-        matkul_val: "1",
-        deadline: "2026-10-24",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Menerapkan media query agar halaman dapat menyesuaikan ukuran layar."
-    },
-    {
-        judul: "Kuis Proses Kognitif",
-        matkul: "Psikologi Kognitif",
-        matkul_val: "2",
-        deadline: "2026-10-25",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Mengerjakan kuis evaluasi proses kognitif."
-    },
-    {
-        judul: "Rencana Pemecahan Masalah",
-        matkul: "Strategi Pemecahan Masalah",
-        matkul_val: "3",
-        deadline: "2026-10-26",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Menyusun tahapan penyelesaian masalah secara sistematis."
-    },
-    {
-        judul: "Proyek Mini Website",
-        matkul: "Desain Web",
-        matkul_val: "1",
-        deadline: "2026-10-27",
-        jam: "23:59",
-        status: "Selesai",
-        deskripsi: "Menyelesaikan proyek mini website sesuai instruksi perkuliahan."
     }
 ];
 

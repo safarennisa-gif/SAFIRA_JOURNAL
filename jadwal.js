@@ -68,11 +68,10 @@ const urutanHari = {
 // 2. KONFIGURASI HALAMAN
 // ============================================================
 
-const JADWAL_HARI_INI = "Selasa";
-
-const JADWAL_TANGGAL = "Selasa, 13 Oktober 2026";
-
-const JADWAL_TANGGAL_SINGKAT = "Selasa, 13 Oktober";
+const _hariIniJadwal = new Date();
+const JADWAL_HARI_INI = _hariIniJadwal.toLocaleDateString("id-ID", { weekday: "long" });
+const JADWAL_TANGGAL = _hariIniJadwal.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const JADWAL_TANGGAL_SINGKAT = _hariIniJadwal.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long" });
 
 
 // ============================================================
