@@ -1,18 +1,17 @@
-
 // ============================================================
 // SAFIRA ACADEMIC JOURNAL
-// CATATAN AKADEMIK - FINAL UI VERSION
+// CATATAN AKADEMIK - FINAL UI VERSION (FIREBASE READY)
 // ============================================================
 
 
 // ============================================================
-// 1. STATE MANAGEMENT & DATA CATATANn
+// 1. STATE MANAGEMENT & DATA CATATAN
 // ============================================================
 
 let daftarCatatan = [
     {
         judul: "Dasar HTML & CSS",
-        matkul: "Desain Webb",
+        matkul: "Desain Web",
         matkul_val: "1",
         isi: "Struktur halaman HTML dan dasar CSS untuk mengatur tampilan website.",
         tanggal: "12 Okt 2026",
@@ -66,7 +65,6 @@ let daftarCatatan = [
     }
 ];
 
-
 // Variabel pelacak mode
 let editIndexCatatan = -1;
 let lihatIndexCatatan = -1;
@@ -84,21 +82,16 @@ const CATATAN_PER_HALAMAN = 6;
 // 2. HELPER & KONFIGURASI DESAIN
 // ============================================================
 
-// Mengamankan teks sebelum dimasukkan ke HTML
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, function (char) {
-        return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        }[char];
+        if (char === "&") return "&";
+        if (char === "<") return "&lt;";
+        if (char === ">") return "&gt;";
+        if (char === '"') return "&quot;";
+        return "&#39;";
     });
 }
 
-
-// Konfigurasi warna kartu berdasarkan mata kuliah
 const colorStyles = {
     pink: {
         bg: "bg-[#FCEAF4]",
@@ -107,7 +100,6 @@ const colorStyles = {
         badgeText: "text-[#9B244F]",
         decor: "tulip-mini.png"
     },
-
     indigo: {
         bg: "bg-[#F0EAFE]",
         border: "border-[#DED1F5]",
@@ -115,7 +107,6 @@ const colorStyles = {
         badgeText: "text-[#4C2A86]",
         decor: "lavender.png"
     },
-
     orange: {
         bg: "bg-[#FFF0E7]",
         border: "border-[#F7DCCB]",
@@ -123,7 +114,6 @@ const colorStyles = {
         badgeText: "text-[#963B16]",
         decor: "kilauan.png"
     },
-
     blue: {
         bg: "bg-[#EAF3FF]",
         border: "border-[#D5E5FA]",
@@ -133,13 +123,10 @@ const colorStyles = {
     }
 };
 
-
-// Menentukan warna berdasarkan mata kuliah
 function dapatkanWarnaMatkul(val) {
     if (val === "1") return "pink";
     if (val === "2") return "indigo";
     if (val === "3") return "orange";
-
     return "blue";
 }
 
@@ -193,7 +180,7 @@ function renderHeaderCatatan() {
                         <img src="aset/avatar.png" alt="" class="h-14 w-14 shrink-0 rounded-full border-2 border-[#E5D4F7] bg-[#E9D5FF] object-cover shadow-sm">
                         <div class="min-w-0">
                             <h4 class="truncate text-lg font-bold text-[#2A1854]">${nama}</h4>
-                            <p class="text-xs font-medium text-[#74658F]">Mahasiswa &bull; Semester ${semester}</p>
+                            <p class="text-xs font-medium text-[#74658F]">Mahasiswa • Semester ${semester}</p>
                             <p class="mt-1 truncate text-[11px] text-[#9587AD]">${email}</p>
                         </div>
                     </div>
@@ -203,7 +190,7 @@ function renderHeaderCatatan() {
                             <span class="flex items-center gap-3"><i class="fa-regular fa-user text-lg"></i><span>Lihat Profil</span></span>
                             <i class="fa-solid fa-chevron-right text-xs text-[#9A8AB4]"></i>
                         </button>
-                        <button type="button" role="menuitem" onclick="closeProfileDropdown(); showLanding()" class="mt-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 font-medium text-red-500 transition-colors hover:bg-red-50">
+                        <button type="button" role="menuitem" onclick="closeProfileDropdown(); logout()" class="mt-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 font-medium text-red-500 transition-colors hover:bg-red-50">
                             <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i><span>Keluar</span>
                         </button>
                     </div>
@@ -253,8 +240,6 @@ window.closeProfileDropdown = function () {
     if (trigger) trigger.setAttribute("aria-expanded", "false");
 };
 
-
-// Mengurutkan catatan
 function urutkanCatatan(data = daftarCatatan) {
     const sortedData = [...data];
 
@@ -334,16 +319,12 @@ window.ubahUrutanCatatan = function (selectElement) {
     if (typeof window.navigate === "function") window.navigate("catatan");
 };
 
-
-// Navigasi tambah
 window.bukaTambahCatatan = function () {
     editIndexCatatan = -1;
     lihatIndexCatatan = -1;
     if (typeof window.navigate === "function") window.navigate("tambahCatatan");
 };
 
-
-// Navigasi edit
 window.bukaEditCatatan = function (index) {
     if (!Number.isInteger(index) || !daftarCatatan[index]) return;
     editIndexCatatan = index;
@@ -351,8 +332,6 @@ window.bukaEditCatatan = function (index) {
     if (typeof window.navigate === "function") window.navigate("tambahCatatan");
 };
 
-
-// Navigasi lihat
 window.bukaLihatCatatan = function (index) {
     if (!Number.isInteger(index) || !daftarCatatan[index]) return;
     lihatIndexCatatan = index;
@@ -370,28 +349,19 @@ window.bukaPopupHapus = function (index) {
     if (typeof window.navigate === "function") window.navigate("catatan");
 };
 
-
 window.tutupPopupHapus = function () {
     hapusIndexCatatan = -1;
     if (typeof window.navigate === "function") window.navigate("catatan");
 };
 
-
 window.aksiKonfirmasiHapus = function () {
-
-    if (
-        hapusIndexCatatan > -1 &&
-        hapusIndexCatatan < daftarCatatan.length
-    ) {
-
+    if (hapusIndexCatatan > -1 && hapusIndexCatatan < daftarCatatan.length) {
         daftarCatatan.splice(hapusIndexCatatan, 1);
         hapusIndexCatatan = -1;
         const totalHalaman = Math.max(1, Math.ceil(dapatkanCatatanTerfilter().length / CATATAN_PER_HALAMAN));
         halamanCatatan = Math.min(halamanCatatan, totalHalaman);
         if (typeof window.navigate === "function") window.navigate("catatan");
-
     }
-
 };
 
 
@@ -400,26 +370,16 @@ window.aksiKonfirmasiHapus = function () {
 // ============================================================
 
 window.aksiSimpanCatatan = function () {
-
     const inputJudul = document.getElementById("input-judul-catatan");
-
     const matkulSelect = document.getElementById("input-matkul-catatan");
-
     const inputIsi = document.getElementById("input-isi-catatan");
-
 
     if (!inputJudul || !matkulSelect || !inputIsi) return;
 
-
     const judul = inputJudul.value.trim();
-
     const matkul_val = matkulSelect.value;
-
-    const matkul =
-        matkulSelect.options[matkulSelect.selectedIndex]?.text || "";
-
+    const matkul = (matkulSelect.options[matkulSelect.selectedIndex]?.text || "").trim();
     const isi = inputIsi.value.trim();
-
 
     if (!judul || !matkul_val || !isi) {
         alert("Mohon isi Judul, Mata Kuliah, dan Isi Catatan sebelum menyimpan!");
@@ -429,57 +389,35 @@ window.aksiSimpanCatatan = function () {
         return;
     }
 
-
     const today = new Date();
-
     const tglOptions = {
         day: "numeric",
         month: "short",
         year: "numeric"
     };
 
-
     const catatanBaru = {
-
         judul: judul,
-
         matkul: matkul,
-
         matkul_val: matkul_val,
-
         isi: isi,
-
         tanggal: today.toLocaleDateString("id-ID", tglOptions),
-
         warna: dapatkanWarnaMatkul(matkul_val),
-
         timestamp: today.getTime()
-
     };
 
-
     if (editIndexCatatan === -1) {
-
         daftarCatatan.unshift(catatanBaru);
-
-    }
-
-    else if (daftarCatatan[editIndexCatatan]) {
-
-        catatanBaru.timestamp =
-            daftarCatatan[editIndexCatatan].timestamp;
-
+    } else if (daftarCatatan[editIndexCatatan]) {
+        catatanBaru.timestamp = daftarCatatan[editIndexCatatan].timestamp;
         daftarCatatan[editIndexCatatan] = catatanBaru;
-
     }
-
 
     editIndexCatatan = -1;
     lihatIndexCatatan = -1;
     halamanCatatan = 1;
 
     if (typeof window.navigate === "function") window.navigate("catatan");
-
 };
 
 
@@ -527,7 +465,6 @@ function renderPaginationCatatan(totalItems, totalPages, startItem, endItem) {
         </div>
     `;
 }
-
 
 function renderCatatan() {
     const dataTerfilter = dapatkanCatatanTerfilter();
@@ -721,154 +658,65 @@ function renderCatatan() {
 // ============================================================
 
 function renderLihatCatatan() {
-
-    if (
-        lihatIndexCatatan < 0 ||
-        !daftarCatatan[lihatIndexCatatan]
-    ) {
-
+    if (lihatIndexCatatan < 0 || !daftarCatatan[lihatIndexCatatan]) {
         return renderCatatan();
-
     }
 
-
     const data = daftarCatatan[lihatIndexCatatan];
-
-    const style =
-        colorStyles[data.warna] || colorStyles.blue;
-
+    const style = colorStyles[data.warna] || colorStyles.blue;
 
     return `
-
         <div class="relative">
-
-
             ${renderHeaderCatatan()}
-
-
-
-            <!-- TOMBOL KEMBALI -->
 
             <button
                 onclick="navigate('catatan')"
                 class="flex items-center gap-3 text-[#0864F7] font-semibold mb-6 hover:text-blue-800 transition-colors text-[15px]"
             >
-
                 <i class="fa-solid fa-arrow-left text-lg"></i>
-
                 Kembali ke Catatan
-
             </button>
 
-
-
-            <!-- KERTAS BACA -->
-
             <article class="bg-gradient-to-br from-[#F8EFFF] via-[#F9F0FF] to-[#FCEAF6] rounded-[17px] p-6 md:p-8 border border-white/90 shadow-[0_7px_24px_rgba(92,57,133,0.06)] min-h-[65vh] relative overflow-hidden">
-
-
-                <img
-                    src="aset/bunga-pojok.png"
-                    class="absolute top-0 right-0 w-28 opacity-35 object-contain pointer-events-none"
-                    alt=""
-                >
-
-
-                <img
-                    src="aset/ranting-bunga.png"
-                    class="absolute bottom-0 left-0 w-32 opacity-35 object-contain pointer-events-none"
-                    alt=""
-                >
-
-
-                <img
-                    src="aset/kilauan.png"
-                    class="absolute top-7 left-[48%] w-7 opacity-70 object-contain pointer-events-none"
-                    alt=""
-                >
-
-
-
-                <!-- INFORMASI CATATAN -->
+                <img src="aset/bunga-pojok.png" class="absolute top-0 right-0 w-28 opacity-35 object-contain pointer-events-none" alt="">
+                <img src="aset/ranting-bunga.png" class="absolute bottom-0 left-0 w-32 opacity-35 object-contain pointer-events-none" alt="">
+                <img src="aset/kilauan.png" class="absolute top-7 left-[48%] w-7 opacity-70 object-contain pointer-events-none" alt="">
 
                 <div class="border-b border-[#DCCDEB] pb-6 mb-7 relative z-10">
-
-
                     <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
-
-
                         <span class="inline-flex items-center gap-2 px-3 py-1.5 ${style.badgeBg} ${style.badgeText} rounded-full text-[13px] font-bold">
-
                             <i class="fa-solid fa-book-open"></i>
-
                             ${escapeHTML(data.matkul)}
-
                         </span>
-
 
                         <button
                             onclick="bukaEditCatatan(${lihatIndexCatatan})"
                             class="bg-[#E9DDFC] hover:bg-[#DDCBF7] text-[#422477] px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 transition-colors text-[14px]"
                         >
-
                             <i class="fa-solid fa-pen text-xs"></i>
-
                             Edit Catatan
-
                         </button>
-
-
                     </div>
 
-
-
                     <h1 class="text-[29px] md:text-[36px] font-extrabold text-[#24104F] mb-3 leading-tight">
-
                         ${escapeHTML(data.judul)}
-
                     </h1>
 
-
-
                     <p class="text-[14px] text-[#786A96] font-medium flex items-center gap-2">
-
                         <i class="fa-regular fa-clock"></i>
-
                         Ditulis pada: ${escapeHTML(data.tanggal)}
-
                     </p>
-
-
                 </div>
-
-
-
-                <!-- ISI CATATAN -->
 
                 <div class="text-[#352657] text-[15px] md:text-[16px] leading-[1.9] whitespace-pre-wrap font-medium relative z-10">
-
                     ${escapeHTML(data.isi)}
-
                 </div>
 
-
-
-                <img
-                    src="aset/buku-2.png"
-                    class="absolute bottom-5 right-5 w-24 opacity-20 object-contain pointer-events-none"
-                    alt=""
-                >
-
-
+                <img src="aset/buku-2.png" class="absolute bottom-5 right-5 w-24 opacity-20 object-contain pointer-events-none" alt="">
             </article>
-
-
         </div>
-
     `;
-
 }
-
 
 
 // ============================================================
@@ -876,249 +724,79 @@ function renderLihatCatatan() {
 // ============================================================
 
 function renderTambahCatatan() {
-
-
-    // --------------------------------------------------------
-    // VARIABEL FORM
-    // --------------------------------------------------------
-
     let judulVal = "";
-
     let matkulVal = "";
-
     let isiVal = "";
 
-
     let judulHalaman = "Tambah Catatan";
-
-    let deskripsiHalaman =
-        "Tuliskan ide dan materi kuliahmu di sini.";
-
+    let deskripsiHalaman = "Tuliskan ide dan materi kuliahmu di sini.";
     let teksTombolSimpan = "Simpan Catatan";
-
-    let teksBawahKiri =
-        "Catatan tersimpan setelah kamu menekan Simpan.";
-
+    let teksBawahKiri = "Catatan tersimpan setelah kamu menekan Simpan.";
     let tanggalPembaruan = "";
 
-
-
-    // --------------------------------------------------------
-    // MODE EDIT CATATAN
-    // --------------------------------------------------------
-
-    if (
-        editIndexCatatan >= 0 &&
-        daftarCatatan[editIndexCatatan]
-    ) {
-
+    if (editIndexCatatan >= 0 && daftarCatatan[editIndexCatatan]) {
         judulHalaman = "Edit Catatan";
-
-        deskripsiHalaman =
-            "Perbarui catatanmu agar tetap lengkap dan mudah dipahami.";
-
+        deskripsiHalaman = "Perbarui catatanmu agar tetap lengkap dan mudah dipahami.";
         teksTombolSimpan = "Simpan Perubahan";
-
-        teksBawahKiri =
-            "Perubahan tersimpan setelah kamu menekan Simpan.";
-
+        teksBawahKiri = "Perubahan tersimpan setelah kamu menekan Simpan.";
 
         judulVal = daftarCatatan[editIndexCatatan].judul;
-
         matkulVal = daftarCatatan[editIndexCatatan].matkul_val;
-
         isiVal = daftarCatatan[editIndexCatatan].isi;
-
-        tanggalPembaruan =
-            daftarCatatan[editIndexCatatan].tanggal;
-
+        tanggalPembaruan = daftarCatatan[editIndexCatatan].tanggal;
     }
 
-
-
-    // --------------------------------------------------------
-    // STRUKTUR HALAMAN FORM
-    // --------------------------------------------------------
-
     return `
-
         <div class="relative pb-2">
-
-
             ${renderHeaderCatatan()}
 
-
-
-            <!-- DEKORASI SEKITAR TOMBOL KEMBALI -->
-
-            <img
-                src="aset/bunga-pojok.png"
-                class="absolute top-[62px] left-[-12px] w-[76px] h-[72px] object-contain opacity-65 pointer-events-none"
-                alt=""
-            >
-
-
-            <img
-                src="aset/ranting-sudut.png"
-                class="absolute top-[58px] right-[-8px] w-[92px] h-[84px] object-contain opacity-65 pointer-events-none"
-                alt=""
-            >
-
-
-
-            <!-- TOMBOL KEMBALI -->
+            <img src="aset/bunga-pojok.png" class="absolute top-[62px] left-[-12px] w-[76px] h-[72px] object-contain opacity-65 pointer-events-none" alt="">
+            <img src="aset/ranting-sudut.png" class="absolute top-[58px] right-[-8px] w-[92px] h-[84px] object-contain opacity-65 pointer-events-none" alt="">
 
             <button
-                onclick="navigate('catatan')"
+                onclick="editIndexCatatan = -1; navigate('catatan')"
                 class="relative z-10 flex items-center gap-3 text-[#0864F7] font-semibold mb-6 hover:text-blue-800 transition-colors text-[15px]"
             >
-
                 <i class="fa-solid fa-arrow-left text-lg"></i>
-
                 Kembali ke Catatan
-
             </button>
 
-
-
-            <!-- PANEL FORM UTAMA -->
-
             <section class="bg-gradient-to-br from-[#F8EEFF] via-[#F9F0FF] to-[#FCEAF7] rounded-[17px] border border-white/90 shadow-[0_7px_24px_rgba(92,57,133,0.055)] px-5 md:px-6 pt-5 md:pt-6 pb-5 relative overflow-hidden min-h-[min(760px,calc(100vh-190px))]">
-
-
-                <!-- DEKORASI PANEL -->
-
-                <img
-                    src="aset/bunga-pojok.png"
-                    class="absolute top-0 left-0 w-[88px] h-[78px] object-contain opacity-60 pointer-events-none"
-                    alt=""
-                >
-
-
-                <img
-                    src="aset/ranting-sudut.png"
-                    class="absolute top-0 right-[25%] w-[82px] h-[70px] object-contain opacity-55 pointer-events-none"
-                    alt=""
-                >
-
-
-                <img
-                    src="aset/kilauan.png"
-                    class="absolute top-5 right-[31%] w-7 h-7 object-contain opacity-70 pointer-events-none"
-                    alt=""
-                >
-
-
-                <img
-                    src="aset/bunga-tangkai.png"
-                    class="absolute bottom-0 right-0 w-[78px] h-[110px] object-contain opacity-30 pointer-events-none"
-                    alt=""
-                >
-
-
-
-                <!-- HEADER FORM -->
+                <img src="aset/bunga-pojok.png" class="absolute top-0 left-0 w-[88px] h-[78px] object-contain opacity-60 pointer-events-none" alt="">
+                <img src="aset/ranting-sudut.png" class="absolute top-0 right-[25%] w-[82px] h-[70px] object-contain opacity-55 pointer-events-none" alt="">
+                <img src="aset/kilauan.png" class="absolute top-5 right-[31%] w-7 h-7 object-contain opacity-70 pointer-events-none" alt="">
+                <img src="aset/bunga-tangkai.png" class="absolute bottom-0 right-0 w-[78px] h-[110px] object-contain opacity-30 pointer-events-none" alt="">
 
                 <div class="relative z-10 flex items-center justify-between gap-5 pb-5 md:pb-6 border-b border-[#DCCDEB]/90">
-
-
                     <div class="flex items-center gap-4 md:gap-5 min-w-0">
-
-
                         <div class="w-[78px] h-[70px] md:w-[100px] md:h-[72px] rounded-[19px] bg-[#EADDFC] flex items-center justify-center relative shrink-0">
-
-
-                            <img
-                                src="aset/buku-6.png"
-                                class="w-[65px] h-[58px] object-contain"
-                                alt="Ilustrasi buku terbuka"
-                            >
-
-
+                            <img src="aset/buku-6.png" class="w-[65px] h-[58px] object-contain" alt="Ilustrasi buku terbuka">
                             <span class="absolute right-[13px] bottom-[12px] w-7 h-7 rounded-full bg-[#EADDFC] flex items-center justify-center text-[#31146B]">
-
                                 <i class="fa-solid fa-pen text-[18px]"></i>
-
                             </span>
-
-
                         </div>
-
-
 
                         <div class="min-w-0">
-
-
                             <h3 class="text-[27px] md:text-[38px] leading-tight font-extrabold tracking-[-0.03em] text-[#24104F] mb-1">
-
                                 ${judulHalaman}
-
                             </h3>
-
-
                             <p class="text-[#786A96] text-[14px] md:text-[18px] font-medium leading-snug">
-
                                 ${deskripsiHalaman}
-
                             </p>
-
-
                         </div>
-
-
                     </div>
-
-
-
-                    <!-- ILUSTRASI BUKU -->
 
                     <div class="relative z-10 hidden md:block w-[225px] lg:w-[270px] h-[108px] shrink-0 mr-1">
-
-
-                        <img
-                            src="aset/buku-5.png"
-                            class="absolute right-0 bottom-[-14px] w-full h-[132px] object-contain object-bottom"
-                            alt="Ilustrasi buku, bunga, dan alat tulis"
-                        >
-
-
+                        <img src="aset/buku-5.png" class="absolute right-0 bottom-[-14px] w-full h-[132px] object-contain object-bottom" alt="Ilustrasi buku, bunga, dan alat tulis">
                     </div>
-
-
                 </div>
 
-
-
-                <!-- FORM INPUT -->
-
                 <div class="relative z-10 flex flex-col pt-6">
-
-
-
-                    <!-- JUDUL DAN MATA KULIAH -->
-
                     <div class="grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] gap-5 md:gap-6 mb-6">
-
-
-
-                        <!-- INPUT JUDUL -->
-
                         <div>
-
-
-                            <label
-                                for="input-judul-catatan"
-                                class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5"
-                            >
-
-                                Judul Catatan
-
-                                <span class="text-red-500">*</span>
-
+                            <label for="input-judul-catatan" class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5">
+                                Judul Catatan <span class="text-red-500">*</span>
                             </label>
-
-
-
                             <input
                                 id="input-judul-catatan"
                                 type="text"
@@ -1128,228 +806,75 @@ function renderTambahCatatan() {
                                 placeholder="Masukkan judul catatan"
                                 class="w-full h-[53px] px-5 rounded-[12px] border border-[#D8C8EF] focus:outline-none focus:border-[#9D7DCE] focus:ring-2 focus:ring-[#DCCAF7]/60 bg-white/35 text-[15px] md:text-[16px] text-[#28194F] placeholder:text-[#877AA4] transition-all font-medium"
                             >
-
-
                         </div>
 
-
-
-                        <!-- INPUT MATA KULIAH -->
-
                         <div>
-
-
-                            <label
-                                for="input-matkul-catatan"
-                                class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5"
-                            >
-
-                                Mata Kuliah
-
-                                <span class="text-red-500">*</span>
-
+                            <label for="input-matkul-catatan" class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5">
+                                Mata Kuliah <span class="text-red-500">*</span>
                             </label>
-
-
-
                             <div class="relative">
-
-
                                 <select
                                     id="input-matkul-catatan"
                                     required
                                     class="appearance-none w-full h-[53px] px-5 pr-12 rounded-[12px] border border-[#D8C8EF] bg-white/35 focus:outline-none focus:border-[#9D7DCE] focus:ring-2 focus:ring-[#DCCAF7]/60 text-[#28194F] text-[15px] md:text-[16px] cursor-pointer transition-all font-medium"
                                 >
-
-
-                                    <option value="" disabled ${matkulVal === "" ? "selected" : ""}>
-
-                                        Pilih mata kuliah
-
-                                    </option>
-
-
-                                    <option value="1" ${matkulVal === "1" ? "selected" : ""}>
-
-                                        Desain Web
-
-                                    </option>
-
-
-                                    <option value="2" ${matkulVal === "2" ? "selected" : ""}>
-
-                                        Psikologi Kognitif
-
-                                    </option>
-
-
-                                    <option value="3" ${matkulVal === "3" ? "selected" : ""}>
-
-                                        Strategi Pemecahan Masalah
-
-                                    </option>
-
-
+                                    <option value="" disabled ${matkulVal === "" ? "selected" : ""}>Pilih mata kuliah</option>
+                                    <option value="1" ${matkulVal === "1" ? "selected" : ""}>Desain Web</option>
+                                    <option value="2" ${matkulVal === "2" ? "selected" : ""}>Psikologi Kognitif</option>
+                                    <option value="3" ${matkulVal === "3" ? "selected" : ""}>Strategi Pemecahan Masalah</option>
                                 </select>
-
-
-
                                 <i class="fa-solid fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-[#24104F] text-sm pointer-events-none"></i>
-
-
                             </div>
-
-
                         </div>
-
-
                     </div>
 
-
-
-                    <!-- INPUT ISI CATATAN -->
-
                     <div class="flex flex-col mb-4">
-
-
-                        <label
-                            for="input-isi-catatan"
-                            class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5"
-                        >
-
-                            Isi Catatan
-
-                            <span class="text-red-500">*</span>
-
+                        <label for="input-isi-catatan" class="block text-[15px] md:text-[16px] font-bold text-[#24104F] mb-2.5">
+                            Isi Catatan <span class="text-red-500">*</span>
                         </label>
-
-
-
                         <textarea
                             id="input-isi-catatan"
                             required
                             placeholder="Mulai tulis catatanmu di sini..."
                             class="w-full h-[285px] md:h-[304px] px-5 py-4 rounded-[12px] border border-[#D8C8EF] focus:outline-none focus:border-[#9D7DCE] focus:ring-2 focus:ring-[#DCCAF7]/60 bg-white/30 text-[15px] md:text-[16px] text-[#28194F] placeholder:text-[#877AA4] resize-y transition-all font-medium leading-[1.55]"
                         >${escapeHTML(isiVal)}</textarea>
-
-
                     </div>
-
-
-
-                    <!-- INFORMASI WAJIB DIISI -->
 
                     <div class="flex justify-between items-center gap-4 mb-5">
-
-
-                        <p class="text-[13px] md:text-[14px] text-[#796B98] font-medium">
-
-                            * Wajib diisi
-
-                        </p>
-
-
-
-                        ${tanggalPembaruan ? `
-
-                            <p class="text-[13px] md:text-[14px] text-[#796B98] font-medium">
-
-                                Terakhir diperbarui: ${escapeHTML(tanggalPembaruan)}
-
-                            </p>
-
-                        ` : ""}
-
-
+                        <p class="text-[13px] md:text-[14px] text-[#796B98] font-medium">* Wajib diisi</p>
+                        ${tanggalPembaruan ? `<p class="text-[13px] md:text-[14px] text-[#796B98] font-medium">Terakhir diperbarui: ${escapeHTML(tanggalPembaruan)}</p>` : ""}
                     </div>
 
-
-
-                    <!-- FOOTER FORM -->
-
                     <div class="flex flex-col md:flex-row justify-between items-center pt-5 border-t border-[#DCCDEB]/90 gap-4 mt-auto">
-
-
-                        <p class="text-[13px] md:text-[14px] text-[#786A96] font-medium">
-
-                            ${teksBawahKiri}
-
-                        </p>
-
-
+                        <p class="text-[13px] md:text-[14px] text-[#786A96] font-medium">${teksBawahKiri}</p>
 
                         <div class="flex gap-3 md:gap-4 w-full md:w-auto">
-
-
-
-                            <!-- TOMBOL BATAL -->
-
                             <button
-                                onclick="navigate('catatan')"
+                                onclick="editIndexCatatan = -1; navigate('catatan')"
                                 class="flex-1 md:flex-none min-w-[116px] px-7 py-3 rounded-[12px] border-[1.5px] border-[#0864F7] text-[#0864F7] font-semibold hover:bg-blue-50/70 transition-colors text-[14px] md:text-[15px]"
                             >
-
                                 Batal
-
                             </button>
-
-
-
-                            <!-- TOMBOL SIMPAN -->
 
                             <button
                                 onclick="aksiSimpanCatatan()"
                                 class="flex-1 md:flex-none px-7 py-3 rounded-[12px] bg-[#0864F7] hover:bg-[#0756D8] text-white font-semibold flex items-center justify-center gap-3 transition-colors shadow-[0_5px_12px_rgba(8,100,247,0.18)] text-[14px] md:text-[15px] whitespace-nowrap"
                             >
-
                                 <i class="fa-solid fa-check text-[17px]"></i>
-
                                 ${teksTombolSimpan}
-
                             </button>
-
-
                         </div>
-
-
                     </div>
-
-
                 </div>
-
-
             </section>
 
-
-
-            <!-- FOOTER DAN DEKORASI BAWAH -->
-
             <div class="relative flex justify-between items-center pt-5">
-
-
-                <p class="text-[#65468F] text-[14px] font-medium">
-
-                    Sedikit demi sedikit, jadi berarti.
-
-                </p>
-
-
-                <img
-                    src="aset/ranting-bunga.png"
-                    class="absolute right-0 -bottom-3 w-[105px] h-[58px] object-contain object-right-bottom opacity-80 pointer-events-none"
-                    alt=""
-                >
-
-
+                <p class="text-[#65468F] text-[14px] font-medium">Sedikit demi sedikit, jadi berarti.</p>
+                <img src="aset/ranting-bunga.png" class="absolute right-0 -bottom-3 w-[105px] h-[58px] object-contain object-right-bottom opacity-80 pointer-events-none" alt="">
             </div>
-
-
         </div>
-
     `;
-
 }
-
 
 // ============================================================
 // AKHIR CATATAN.JS
