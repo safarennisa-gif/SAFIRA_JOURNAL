@@ -149,6 +149,35 @@ window.handleSafiraAuthSubmit = async function (event, mode = "login") {
     return false;
 };
 
+// Login / Daftar menggunakan akun Google
+window.handleSafiraGoogleLogin = async function (button) {
+    const teksAsli = button ? button.innerHTML : "";
+    if (button) {
+        button.disabled = true;
+        button.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke Google...`;
+    }
+
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: "select_account" });
+        await auth.signInWithPopup(provider);
+        // Setelah berhasil, auth.onAuthStateChanged otomatis memuat data & membuka dashboard
+    } catch (error) {
+        if (error.code !== "auth/popup-closed-by-user" && error.code !== "auth/cancelled-popup-request") {
+            const pesanError = {
+                "auth/popup-blocked": "Popup diblokir browser. Izinkan popup untuk masuk dengan Google.",
+                "auth/unauthorized-domain": "Domain ini belum diizinkan di Firebase Console (Authorized domains)."
+            };
+            alert(pesanError[error.code] || "Gagal masuk dengan Google: " + error.message);
+        }
+    } finally {
+        if (button) {
+            button.disabled = false;
+            button.innerHTML = teksAsli;
+        }
+    }
+};
+
 // Hubungkan tombol Keluar dengan Firebase SignOut
 const showLandingAsli = window.showLanding;
 window.logout = async function () {
