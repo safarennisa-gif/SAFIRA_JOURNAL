@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#DCCBFA">
+    <meta name="description" content="SAFIRA — Academic Journal dan Personal Planner untuk mengelola catatan, tugas, jadwal, dan target belajar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>SAFIRA - Academic Journal Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="safira-body text-brand-text font-sans antialiased bg-brand-bg relative">
+
+    <!-- WADAH AUTENTIKASI (Landing, Login, Daftar) -->
+    <div id="login-container" class="safira-auth-root w-full min-h-screen z-50 relative"></div>
+
+    <!-- WADAH APLIKASI UTAMA (Sidebar + Konten) -->
+    <div id="app-container" class="safira-app hidden h-screen overflow-hidden">
+
+        <!-- HEADER KHUSUS MOBILE -->
+        <header class="safira-mobilebar" aria-label="Navigasi SAFIRA">
+            <button
+                id="safira-menu-toggle"
+                type="button"
+                class="safira-menu-toggle"
+                onclick="toggleSafiraSidebar()"
+                aria-label="Buka menu navigasi"
+                aria-controls="app-sidebar"
+                aria-expanded="false"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="safira-mobile-brand">
+                <img src="aset/buku-2.png" alt="Logo SAFIRA">
+                <span>SAFIRA</span>
+            </div>
+
+            <span class="safira-mobile-caption">Academic Journal</span>
+        </header>
+
+        <!-- LAPISAN GELAP DI BELAKANG SIDEBAR MOBILE -->
+        <div
+            id="safira-sidebar-overlay"
+            class="safira-sidebar-overlay"
+            onclick="closeSafiraSidebar()"
+            aria-hidden="true"
+        ></div>
+
+        <!-- SIDEBAR -->
+        <aside id="app-sidebar" aria-label="Navigasi utama" class="safira-sidebar w-[273px] shrink-0 bg-brand-sidebar flex flex-col h-full shadow-sm z-10 border-r border-purple-100 relative overflow-hidden select-none">
+            
+            <!-- ========================================================= -->
+            <!-- LAPISAN TABURAN BINTANG, KILAUAN & RANTING SUDUT SIDEBAR -->
+            <!-- ========================================================= -->
+            <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+                <!-- Ranting Sudut Kiri Atas -->
+                <img src="aset/ranting-sudut.png" alt="Ranting Kiri Atas" class="absolute -top-1 -left-1 w-28 opacity-95">
+
+                <!-- Taburan Bintang & Kilauan Area Atas (Sekitar Logo) -->
+                <img src="aset/bintang.png" alt="" class="absolute top-3.5 right-6 w-3.5 h-3.5 opacity-85">
+                <span class="absolute top-5 right-14 w-1.5 h-1.5 rounded-full bg-white/80"></span>
+                <img src="aset/bintang.png" alt="" class="absolute top-9 right-3.5 w-2 h-2 opacity-70">
+                <img src="aset/bintang.png" alt="" class="absolute top-12 left-8 w-3 h-3 opacity-80">
+                <span class="absolute top-16 left-5 w-1 h-1 rounded-full bg-yellow-100/90"></span>
+                <img src="aset/kilauan.png" alt="" class="absolute top-20 right-7 w-4 h-4 opacity-75">
+                <img src="aset/kilauan.png" alt="" class="absolute top-24 left-4 w-4 h-4 opacity-75">
+                <img src="aset/bintang.png" alt="" class="absolute top-28 right-4 w-3.5 h-3.5 opacity-85">
+                <span class="absolute top-32 left-9 w-1.5 h-1.5 rounded-full bg-white/75"></span>
+                <img src="aset/bintang.png" alt="" class="absolute top-36 left-5 w-2.5 h-2.5 opacity-75">
+                <img src="aset/bintang.png" alt="" class="absolute top-[152px] right-5 w-2.5 h-2.5 opacity-80">
+                <img src="aset/bintang.png" alt="" class="absolute top-[168px] right-3 w-3 h-3 opacity-75">
+                <span class="absolute top-[172px] left-6 w-1 h-1 rounded-full bg-white/80"></span>
+
+                <!-- Taburan Bintang & Kilauan Area Tengah (Sela-Sela Menu Navigasi) -->
+                <img src="aset/bintang.png" alt="" class="absolute top-[250px] left-2.5 w-2 h-2 opacity-65">
+                <span class="absolute top-[275px] right-4 w-1.5 h-1.5 rounded-full bg-white/75"></span>
+                <img src="aset/bintang.png" alt="" class="absolute top-[305px] right-5 w-2.5 h-2.5 opacity-75">
+                <img src="aset/bintang.png" alt="" class="absolute top-[345px] left-3 w-2.5 h-2.5 opacity-70">
+                <img src="aset/bintang.png" alt="" class="absolute top-[365px] right-3.5 w-3.5 h-3.5 opacity-85">
+                <span class="absolute top-[395px] right-7 w-1 h-1 rounded-full bg-yellow-100/80"></span>
+                <img src="aset/kilauan.png" alt="" class="absolute top-[420px] right-3 w-5 h-5 opacity-80">
+                <img src="aset/bintang.png" alt="" class="absolute top-[445px] left-3.5 w-2 h-2 opacity-70">
+                <img src="aset/bintang.png" alt="" class="absolute top-[475px] right-6 w-3 h-3 opacity-80">
+                <span class="absolute top-[490px] left-6 w-1.5 h-1.5 rounded-full bg-white/70"></span>
+
+                <!-- Taburan Bintang & Kilauan Area Bawah (Sekitar Ilustrasi & Kutipan) -->
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[250px] left-6 w-3 h-3 opacity-80">
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[255px] left-16 w-2.5 h-2.5 opacity-75">
+                <img src="aset/kilauan.png" alt="" class="absolute bottom-[245px] right-8 w-4 h-4 opacity-75">
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[215px] right-3.5 w-3 h-3 opacity-80">
+                <span class="absolute bottom-[190px] right-5 w-1.5 h-1.5 rounded-full bg-white/80"></span>
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[145px] right-5 w-2.5 h-2.5 opacity-75">
+                <img src="aset/kilauan.png" alt="" class="absolute bottom-[135px] left-14 w-4 h-4 opacity-75">
+                <span class="absolute bottom-[120px] left-7 w-1.5 h-1.5 rounded-full bg-yellow-100/85"></span>
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[68px] left-5 w-2.5 h-2.5 opacity-75">
+                <img src="aset/bintang.png" alt="" class="absolute bottom-[52px] right-16 w-2 h-2 opacity-70">
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 1. BAGIAN ATAS: LOGO & JUDUL (TERPUSAT)                   -->
+            <!-- ========================================================= -->
+            <div class="pt-10 pb-5 px-6 flex flex-col items-center justify-center text-center relative z-10">
+                <div class="relative mb-2 flex justify-center items-center">
+                    <!-- translate-x-2 menyeimbangkan bunga di kanan buku agar buku tepat di tengah teks SAFIRA -->
+                    <img src="aset/buku-2.png" alt="Logo SAFIRA" class="w-20 h-auto object-contain transform translate-x-2 drop-shadow-sm">
+                </div>
+                <h1 class="text-[28px] font-black tracking-tight text-[#1E1B4B] leading-none">SAFIRA</h1>
+                <p class="text-[13.5px] font-semibold text-[#1E1B4B]/75 mt-1.5">Academic Journal</p>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- 2. BAGIAN TENGAH: MENU NAVIGASI                           -->
+            <!-- ========================================================= -->
+            <nav class="px-5 space-y-1.5 relative z-10" id="nav-menu">
+                <a href="javascript:void(0)" onclick="navigate('dashboard'); closeSafiraSidebar()" data-page="dashboard" class="menu-item flex items-center gap-3.5 px-4 py-2.5 bg-brand-purple text-white rounded-2xl font-bold shadow-md shadow-indigo-200 transition-colors text-[15px]">
+                    <i class="fa-solid fa-house w-5 text-center text-base"></i> Dashboard
+                </a>
+                <a href="javascript:void(0)" onclick="navigate('catatan'); closeSafiraSidebar()" data-page="catatan" class="menu-item flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 rounded-2xl font-semibold transition-colors text-[15px]">
+                    <i class="fa-regular fa-file-lines w-5 text-center text-base"></i> Catatan Akademik
+                </a>
+                <a href="javascript:void(0)" onclick="navigate('tugas'); closeSafiraSidebar()" data-page="tugas" class="menu-item flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 rounded-2xl font-semibold transition-colors text-[15px]">
+                    <i class="fa-regular fa-square-check w-5 text-center text-base"></i> Tugas
+                </a>
+                <a href="javascript:void(0)" onclick="navigate('jadwal'); closeSafiraSidebar()" data-page="jadwal" class="menu-item flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 rounded-2xl font-semibold transition-colors text-[15px]">
+                    <i class="fa-regular fa-calendar w-5 text-center text-base"></i> Jadwal
+                </a>
+                <a href="javascript:void(0)" onclick="navigate('progres'); closeSafiraSidebar()" data-page="progres" class="menu-item flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 rounded-2xl font-semibold transition-colors text-[15px]">
+                    <i class="fa-solid fa-chart-simple w-5 text-center text-base"></i> Progres Belajar
+                </a>
+                <a href="javascript:void(0)" onclick="navigate('profil'); closeSafiraSidebar()" data-page="profil" class="menu-item flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 rounded-2xl font-semibold transition-colors text-[15px]">
+                    <i class="fa-regular fa-user w-5 text-center text-base"></i> Profil
+                </a>
+            </nav>
+
+            <!-- ========================================================= -->
+            <!-- 3. BAGIAN BAWAH: ILUSTRASI TENGAH, KUTIPAN & KELUAR       -->
+            <!-- ========================================================= -->
+            <div class="flex-1 flex flex-col justify-between px-5 pb-7 pt-2 relative z-10">
+                
+                <!-- Wadah Ilustrasi Buku & Bunga (Berada Tepat di Tengah Sidebar) -->
+                <div class="flex-1 flex items-center justify-center w-full my-auto pointer-events-none">
+                    <div class="relative w-52 h-40 flex items-center justify-center mx-auto">
+                        
+                        <!-- Tangkai Bunga Peach di Sisi Kiri Buku -->
+                        <img src="aset/tangkai-sidebar.png" alt="Tangkai Bunga Kiri" class="absolute -bottom-3 -left-2 w-24 object-contain opacity-95 transform -rotate-6 z-0">
+                        
+                        <!-- Buku Catatan Pink & Pensil di Tengah -->
+                        <img src="aset/buku-4.png" alt="Buku Catatan" class="w-28 object-contain relative z-10 transform -rotate-3 translate-x-2 -translate-y-2 drop-shadow-sm">
+                        
+                        <!-- Ranting Lavender Melengkung di Kanan Bawah Buku -->
+                        <img src="aset/lavender.png" alt="Lavender Kanan" class="absolute -bottom-3 right-0 w-24 object-contain opacity-95 transform rotate-[112deg] scale-x-[-1] z-20">
+                        
+                        <!-- Aksen Garis Miring Halus & Bintang di Bawah Buku -->
+                        <div class="absolute bottom-2 left-12 w-24 h-[1.5px] bg-[#1E1B4B]/20 transform -rotate-[18deg] rounded-full z-10"></div>
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-1 left-20 w-3 h-3 opacity-85 z-20">
+                    </div>
+                </div>
+
+                <!-- Blok Kutipan Motivasi & Tombol Keluar -->
+                <div class="w-full relative z-20">
+                    <!-- Kotak Kutipan Motivasi -->
+                    <div class="relative py-3.5 mb-2 border-y border-white/45 text-center mx-1">
+                        <img src="aset/bintang.png" alt="" class="absolute top-2 left-3 w-2.5 h-2.5 opacity-70 pointer-events-none">
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-1.5 left-1.5 w-3.5 h-3.5 opacity-85 pointer-events-none">
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-2 right-2 w-3.5 h-3.5 opacity-85 pointer-events-none">
+                        <span class="absolute top-2.5 right-4 w-1.5 h-1.5 rounded-full bg-white/80 pointer-events-none"></span>
+                        <p class="text-[13px] font-semibold text-[#1E1B4B]/85 leading-relaxed tracking-wide">
+                            Sedikit demi sedikit,<br>jadi berarti.
+                        </p>
+                    </div>
+
+                    <!-- Tombol Keluar -->
+                    <a href="javascript:void(0)" onclick="showLanding(); closeSafiraSidebar()" class="flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 hover:text-red-600 rounded-2xl font-semibold transition-colors group relative z-20 text-[15px]">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center text-base group-hover:text-red-600"></i> Keluar
+                    </a>
+                </div>
+
+                <!-- Hiasan Tangkai Bunga Pojok Kanan Bawah Sidebar -->
+                <img src="aset/tangkai-sidebar.png" alt="Bunga Pojok Bawah" class="absolute -bottom-4 -right-1 w-24 opacity-95 pointer-events-none z-10 transform rotate-[30deg]">
+            </div>
+        </aside>
+
+        <!-- AREA KONTEN DINAMIS -->
+        <main id="app-content" class="safira-main flex-1 h-full overflow-y-auto">
+            <!-- Konten dari file JS akan dirender di sini -->
+        </main>
+    </div>
+
+    <!-- PANGGIL FILE JS -->
+    <script src="dashboard.js"></script>
+    <script src="catatan.js"></script>
+    <script src="tugas.js"></script>
+    <script src="jadwal.js"></script>
+    <script src="progres.js"></script>
+    <script src="profil.js"></script>
+    <script src="login.js"></script>
+
+    <script>
+        const SAFIRA_ROUTE_RENDERERS = {
+            dashboard: () => typeof renderDashboard === "function" ? renderDashboard() : null,
+            catatan: () => typeof renderCatatan === "function" ? renderCatatan() : null,
+            tambahCatatan: () => typeof renderTambahCatatan === "function" ? renderTambahCatatan() : null,
+            lihatCatatan: () => typeof renderLihatCatatan === "function" ? renderLihatCatatan() : null,
+            tugas: () => typeof renderTugas === "function" ? renderTugas() : null,
+            tambahTugas: () => typeof renderTambahTugas === "function" ? renderTambahTugas() : null,
+            jadwal: () => typeof renderJadwal === "function" ? renderJadwal() : null,
+            tambahJadwal: () => typeof renderTambahJadwal === "function" ? renderTambahJadwal() : null,
+            progres: () => typeof renderProgres === "function" ? renderProgres() : null,
+            tambahTarget: () => typeof renderTambahTarget === "function" ? renderTambahTarget() : null,
+            profil: () => typeof renderProfil === "function" ? renderProfil() : null
+        };
+
+        const SAFIRA_ACTIVE_MENU = {
+            dashboard: "dashboard",
+            catatan: "catatan",
+            tambahCatatan: "catatan",
+            lihatCatatan: "catatan",
+            tugas: "tugas",
+            tambahTugas: "tugas",
+            jadwal: "jadwal",
+            tambahJadwal: "jadwal",
+            progres: "progres",
+            tambahTarget: "progres",
+            profil: "profil"
+        };
+
+        const SAFIRA_PAGE_TITLES = {
+            dashboard: "Dashboard",
+            catatan: "Catatan Akademik",
+            tambahCatatan: "Catatan Akademik",
+            lihatCatatan: "Catatan Akademik",
+            tugas: "Tugas",
+            tambahTugas: "Tugas",
+            jadwal: "Jadwal",
+            tambahJadwal: "Jadwal",
+            progres: "Progres Belajar",
+            tambahTarget: "Progres Belajar",
+            profil: "Profil"
+        };
+
+        window.navigate = function(page) {
+            if (page === "login" || page === "landing" || page === "fitur" || page === "daftar") {
+                window.switchAuthView(page === "landing" ? "landing" : page);
+                return;
+            }
+
+            const contentDiv = document.getElementById("app-content");
+            const renderer = SAFIRA_ROUTE_RENDERERS[page];
+
+            if (!contentDiv || typeof renderer !== "function") {
+                console.warn("Halaman SAFIRA tidak ditemukan:", page);
+                return;
+            }
+
+            try {
+                const markup = renderer();
+
+                if (typeof markup !== "string") {
+                    throw new Error("Renderer tidak menghasilkan konten HTML untuk halaman: " + page);
+                }
+
+                contentDiv.innerHTML = markup;
+                contentDiv.scrollTop = 0;
+
+                const activeMenu = SAFIRA_ACTIVE_MENU[page] || "dashboard";
+
+                document.querySelectorAll("#nav-menu .menu-item").forEach((item) => {
+                    const isActive = item.dataset.page === activeMenu;
+
+                    item.classList.toggle("is-active", isActive);
+                    item.classList.toggle("bg-brand-purple", isActive);
+                    item.classList.toggle("text-white", isActive);
+                    item.classList.toggle("font-bold", isActive);
+                    item.classList.toggle("font-semibold", !isActive);
+
+                    if (isActive) {
+                        item.setAttribute("aria-current", "page");
+                    } else {
+                        item.removeAttribute("aria-current");
+                    }
+                });
+
+                document.title = "SAFIRA — " + (SAFIRA_PAGE_TITLES[page] || "Academic Journal");
+                window.closeSafiraSidebar();
+
+                window.dispatchEvent(new CustomEvent("safira:pagechange", {
+                    detail: { page: page, activeMenu: activeMenu }
+                }));
+            } catch (error) {
+                console.error("Gagal merender halaman SAFIRA:", error);
+                contentDiv.innerHTML = `
+                    <section class="safira-render-error" role="alert">
+                        <h2>Halaman tidak dapat dimuat</h2>
+                        <p>Terjadi kesalahan saat menampilkan halaman. Periksa Console browser untuk detail teknis.</p>
+                        <button type="button" onclick="navigate('dashboard')">Kembali ke Dashboard</button>
+                    </section>
+                `;
+            }
+        };
+
+        window.toggleSafiraSidebar = function() {
+            const sidebar = document.getElementById("app-sidebar");
+            const overlay = document.getElementById("safira-sidebar-overlay");
+            const toggle = document.getElementById("safira-menu-toggle");
+
+            if (!sidebar || !overlay) return;
+
+            const isOpen = sidebar.classList.toggle("is-open");
+            overlay.classList.toggle("is-visible", isOpen);
+            document.body.classList.toggle("safira-sidebar-open", isOpen);
+
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", String(isOpen));
+                toggle.setAttribute("aria-label", isOpen ? "Tutup menu navigasi" : "Buka menu navigasi");
+                const icon = toggle.querySelector("i");
+                if (icon) {
+                    icon.classList.toggle("fa-bars", !isOpen);
+                    icon.classList.toggle("fa-xmark", isOpen);
+                }
+            }
+        };
+
+        window.closeSafiraSidebar = function() {
+            const sidebar = document.getElementById("app-sidebar");
+            const overlay = document.getElementById("safira-sidebar-overlay");
+            const toggle = document.getElementById("safira-menu-toggle");
+
+            if (sidebar) sidebar.classList.remove("is-open");
+            if (overlay) overlay.classList.remove("is-visible");
+            document.body.classList.remove("safira-sidebar-open");
+
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", "false");
+                toggle.setAttribute("aria-label", "Buka menu navigasi");
+                const icon = toggle.querySelector("i");
+                if (icon) {
+                    icon.classList.add("fa-bars");
+                    icon.classList.remove("fa-xmark");
+                }
+            }
+        };
+
+        window.switchAuthView = function(viewType) {
+            const loginContainer = document.getElementById("login-container");
+            const appContainer = document.getElementById("app-container");
+
+            if (!loginContainer) return;
+
+            if (appContainer) {
+                appContainer.classList.add("hidden");
+                appContainer.classList.remove("flex");
+            }
+
+            loginContainer.classList.remove("hidden");
+
+            try {
+                loginContainer.innerHTML = typeof renderLogin === "function"
+                    ? renderLogin(viewType)
+                    : '<p class="p-8 text-center">Halaman autentikasi belum dapat dimuat.</p>';
+
+                const title = {
+                    landing: "Beranda",
+                    fitur: "Fitur",
+                    login: "Masuk",
+                    daftar: "Daftar"
+                }[viewType] || "Academic Journal";
+
+                document.title = "SAFIRA — " + title;
+                window.closeSafiraSidebar();
+                window.scrollTo(0, 0);
+            } catch (error) {
+                console.error("Gagal memuat halaman autentikasi:", error);
+            }
+        };
+
+        window.showLanding = function() {
+            window.switchAuthView("landing");
+        };
+
+        // Digunakan oleh menu Keluar pada dropdown profil di beberapa modul.
+        window.logout = function() {
+            window.showLanding();
+        };
+
+        window.doLogin = function() {
+            const loginContainer = document.getElementById("login-container");
+            const appContainer = document.getElementById("app-container");
+
+            if (loginContainer) loginContainer.classList.add("hidden");
+
+            if (appContainer) {
+                appContainer.classList.remove("hidden");
+                appContainer.classList.add("flex");
+            }
+
+            window.closeSafiraSidebar();
+            window.navigate("dashboard");
+        };
+
+        window.addEventListener("DOMContentLoaded", function() {
+            window.showLanding();
+        });
+
+        window.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                window.closeSafiraSidebar();
+            }
+        });
+
+        window.addEventListener("resize", function() {
+            if (window.innerWidth > 767) {
+                window.closeSafiraSidebar();
+            }
+        });
+    </script>
+</body>
+</html>
