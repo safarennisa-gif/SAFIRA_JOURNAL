@@ -1,7 +1,5 @@
-
 // ============================================================
-// SAFIRA — HALAMAN PROFIL
-// Revisi desain mengikuti referensi SAFIRA.
+// SAFIRA — HALAMAN PROFIL & KELOLA MATA KULIAH (FIREBASE READY)
 // Struktur aset tetap menggunakan folder: aset/
 // ============================================================
 
@@ -34,7 +32,7 @@ const PROFIL_ASSETS = {
 };
 
 
-// Data profil frontend.
+// Data profil frontend (otomatis disinkronkan dengan Firestore).
 let safiraProfileData = {
     full_name: "Safira",
     email: "safira@example.com",
@@ -49,16 +47,19 @@ let safiraProfileData = {
 
 function escapeHTMLProfil(value) {
     return String(value ?? "").replace(/[&<>"']/g, function(char) {
-        const entities = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-        };
-
-        return entities[char];
+        if (char === "&") return "&";
+        if (char === "<") return "&lt;";
+        if (char === ">") return "&gt;";
+        if (char === '"') return "&quot;";
+        return "'";
     });
+}
+
+function getDaftarMatkulGlobal() {
+    if (typeof daftarMataKuliah !== "undefined" && Array.isArray(daftarMataKuliah)) {
+        return daftarMataKuliah;
+    }
+    return [];
 }
 
 
@@ -80,7 +81,6 @@ function renderProfilInput({
 
     return `
         <div class="min-w-0">
-
             <label
                 for="${escapeHTMLProfil(id)}"
                 class="mb-2 block text-[14px] font-extrabold text-[#211044] sm:text-[16px]"
@@ -103,7 +103,6 @@ function renderProfilInput({
                     ${escapeHTMLProfil(help)}
                 </p>
             ` : ""}
-
         </div>
     `;
 }
@@ -116,13 +115,11 @@ function renderProfilInput({
 function renderProfilHeader() {
     return `
         <header class="relative z-30 mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
             <h2 class="text-[30px] font-black tracking-[-0.04em] text-[#211044] sm:text-[38px]">
                 Profil
             </h2>
 
             <div class="relative flex items-center gap-3 sm:gap-5">
-
                 <span class="hidden border-r border-[#D7C6EA] pr-5 text-[13px] font-medium text-[#38245E] sm:inline sm:text-[15px]">
                     Selasa, 13 Oktober 2026
                 </span>
@@ -130,34 +127,26 @@ function renderProfilHeader() {
                 <button
                     id="profile-dropdown-trigger"
                     type="button"
-                    aria-label="Buka menu profil Safira"
+                    aria-label="Buka menu profil ${escapeHTMLProfil(safiraProfileData.full_name)}"
                     aria-haspopup="true"
                     aria-expanded="false"
                     aria-controls="profile-dropdown"
                     onclick="toggleProfileDropdown()"
                     class="relative z-50 flex items-center gap-3 rounded-full px-2 py-1 transition-colors hover:bg-white/40"
                 >
-
                     <img
                         src="${PROFIL_ASSETS.avatar}"
-                        alt="Foto profil Safira"
+                        alt="Foto profil ${escapeHTMLProfil(safiraProfileData.full_name)}"
                         class="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm sm:h-11 sm:w-11"
                     >
 
                     <span class="flex items-center gap-1.5 text-[14px] font-extrabold text-[#211044] sm:text-[15px]">
-
                         <span data-safira-profile-name>
                             ${escapeHTMLProfil(safiraProfileData.full_name)}
                         </span>
-
                         <i id="profile-dropdown-icon" class="fa-solid fa-chevron-down text-[11px] text-[#38245E]"></i>
-
                     </span>
-
                 </button>
-
-
-                <!-- Overlay -->
 
                 <div
                     id="profile-dropdown-overlay"
@@ -166,17 +155,12 @@ function renderProfilHeader() {
                     aria-hidden="true"
                 ></div>
 
-
-                <!-- Dropdown -->
-
                 <div
                     id="profile-dropdown"
                     role="menu"
                     class="absolute right-0 top-14 z-50 hidden w-[min(320px,calc(100vw-32px))] origin-top-right overflow-hidden rounded-3xl border border-[#E9DDF7] bg-white shadow-xl"
                 >
-
                     <div class="flex items-center gap-4 border-b border-[#F0E7F8] p-5">
-
                         <img
                             src="${PROFIL_ASSETS.avatar}"
                             alt=""
@@ -184,13 +168,12 @@ function renderProfilHeader() {
                         >
 
                         <div class="min-w-0">
-
                             <h4 data-safira-profile-name class="truncate text-lg font-bold text-[#211044]">
                                 ${escapeHTMLProfil(safiraProfileData.full_name)}
                             </h4>
 
                             <p class="text-xs font-medium text-[#74658F]">
-                                Mahasiswa &bull; Semester
+                                Mahasiswa • Semester
                                 <span data-safira-profile-semester>
                                     ${escapeHTMLProfil(safiraProfileData.semester)}
                                 </span>
@@ -199,49 +182,35 @@ function renderProfilHeader() {
                             <p data-safira-profile-email class="mt-1 truncate text-[11px] text-[#9587AD]">
                                 ${escapeHTMLProfil(safiraProfileData.email)}
                             </p>
-
                         </div>
-
                     </div>
 
-
                     <div class="p-3">
-
                         <button
                             type="button"
                             role="menuitem"
                             onclick="closeProfileDropdown(); navigate('profil')"
                             class="flex w-full items-center justify-between rounded-xl px-4 py-3 font-medium text-[#49376D] transition-colors hover:bg-[#F5EEFC]"
                         >
-
                             <span class="flex items-center gap-3">
                                 <i class="fa-regular fa-user text-lg"></i>
                                 <span>Lihat Profil</span>
                             </span>
-
                             <i class="fa-solid fa-chevron-right text-xs text-[#9A8AB4]"></i>
-
                         </button>
-
 
                         <button
                             type="button"
                             role="menuitem"
-                            onclick="closeProfileDropdown(); showLanding()"
+                            onclick="closeProfileDropdown(); logout()"
                             class="mt-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 font-medium text-red-500 transition-colors hover:bg-red-50"
                         >
-
                             <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
                             <span>Keluar</span>
-
                         </button>
-
                     </div>
-
                 </div>
-
             </div>
-
         </header>
     `;
 }
@@ -254,64 +223,23 @@ function renderProfilHeader() {
 function renderProfilHero() {
     return `
         <section class="relative mb-4 flex min-h-[180px] items-center overflow-hidden rounded-[22px] border border-white/80 bg-gradient-to-r from-[#FCE5F5] via-[#EADCFD] to-[#E5D9FC] px-6 py-7 shadow-sm sm:min-h-[200px] sm:px-9 lg:px-10">
-
-            <!-- Dekorasi kiri -->
-
-            <img
-                src="${PROFIL_ASSETS.flowerCorner}"
-                alt=""
-                class="pointer-events-none absolute -left-2 -top-2 z-10 h-24 w-24 object-contain sm:h-32 sm:w-32"
-            >
-
-            <img
-                src="${PROFIL_ASSETS.sparkle}"
-                alt=""
-                class="pointer-events-none absolute left-[10%] top-4 z-10 h-8 w-8 object-contain"
-            >
-
-
-            <!-- Dekorasi kanan -->
-
-            <img
-                src="${PROFIL_ASSETS.branchCorner}"
-                alt=""
-                class="pointer-events-none absolute right-0 top-0 z-10 h-24 w-24 rotate-90 object-contain sm:h-32 sm:w-32"
-            >
-
-            <img
-                src="${PROFIL_ASSETS.sparkles}"
-                alt=""
-                class="pointer-events-none absolute right-[27%] top-7 z-10 h-9 w-9 object-contain"
-            >
-
-
-            <!-- Teks -->
+            <img src="${PROFIL_ASSETS.flowerCorner}" alt="" class="pointer-events-none absolute -left-2 -top-2 z-10 h-24 w-24 object-contain sm:h-32 sm:w-32">
+            <img src="${PROFIL_ASSETS.sparkle}" alt="" class="pointer-events-none absolute left-[10%] top-4 z-10 h-8 w-8 object-contain">
+            <img src="${PROFIL_ASSETS.branchCorner}" alt="" class="pointer-events-none absolute right-0 top-0 z-10 h-24 w-24 rotate-90 object-contain sm:h-32 sm:w-32">
+            <img src="${PROFIL_ASSETS.sparkles}" alt="" class="pointer-events-none absolute right-[27%] top-7 z-10 h-9 w-9 object-contain">
 
             <div class="relative z-20 max-w-[720px]">
-
                 <h1 class="mb-2 text-[28px] font-black leading-tight tracking-[-0.04em] text-[#211044] sm:text-[36px] lg:text-[42px]">
                     Kenali dirimu, susun langkahmu.
                 </h1>
-
                 <p class="text-[15px] font-medium leading-relaxed text-[#66518F] sm:text-[20px] lg:text-[22px]">
                     Perbarui informasi akun dan identitas akademikmu.
                 </p>
-
             </div>
-
-
-            <!-- Ilustrasi karakter -->
 
             <div class="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-full w-[43%] items-end justify-center lg:flex">
-
-                <img
-                    src="${PROFIL_ASSETS.hero}"
-                    alt="Ilustrasi karakter SAFIRA"
-                    class="h-[100%] w-full object-contain object-bottom"
-                >
-
+                <img src="${PROFIL_ASSETS.hero}" alt="Ilustrasi karakter SAFIRA" class="h-[100%] w-full object-contain object-bottom">
             </div>
-
         </section>
     `;
 }
@@ -322,107 +250,51 @@ function renderProfilHero() {
 // ------------------------------------------------------------
 
 function renderProfilCard() {
+    const labelProdi = safiraProfileData.program_studi
+        ? `Mahasiswa • ${escapeHTMLProfil(safiraProfileData.program_studi)}`
+        : "Mahasiswa";
+
     return `
         <section class="relative flex min-h-[520px] flex-col items-center justify-between overflow-hidden rounded-[22px] border border-white/80 bg-gradient-to-br from-[#FDEAF2] via-[#FCE8F3] to-[#F5E5FA] p-6 shadow-sm sm:p-7">
-
-            <!-- Dekorasi sudut -->
-
-            <img
-                src="${PROFIL_ASSETS.flowerCorner}"
-                alt=""
-                class="pointer-events-none absolute -left-2 -top-2 h-24 w-24 object-contain opacity-90"
-            >
-
-            <img
-                src="${PROFIL_ASSETS.branchCorner}"
-                alt=""
-                class="pointer-events-none absolute -right-2 -top-2 h-24 w-24 rotate-90 object-contain opacity-90"
-            >
-
-            <img
-                src="${PROFIL_ASSETS.sparkle}"
-                alt=""
-                class="pointer-events-none absolute right-[22%] top-5 h-7 w-7 object-contain"
-            >
-
-
-            <!-- Informasi utama -->
+            <img src="${PROFIL_ASSETS.flowerCorner}" alt="" class="pointer-events-none absolute -left-2 -top-2 h-24 w-24 object-contain opacity-90">
+            <img src="${PROFIL_ASSETS.branchCorner}" alt="" class="pointer-events-none absolute -right-2 -top-2 h-24 w-24 rotate-90 object-contain opacity-90">
+            <img src="${PROFIL_ASSETS.sparkle}" alt="" class="pointer-events-none absolute right-[22%] top-5 h-7 w-7 object-contain">
 
             <div class="relative z-10 flex w-full flex-col items-center text-center">
-
-                <!-- Foto profil -->
-
                 <div class="mb-3 h-[185px] w-[185px] overflow-hidden rounded-full border-[4px] border-white bg-[#E4D8FF] shadow-[0_5px_18px_rgba(92,59,143,.14)] sm:h-[205px] sm:w-[205px]">
-
-                    <img
-                        src="${PROFIL_ASSETS.avatar}"
-                        alt="Foto profil Safira"
-                        class="h-full w-full object-cover"
-                    >
-
+                    <img src="${PROFIL_ASSETS.avatar}" alt="Foto profil" class="h-full w-full object-cover">
                 </div>
 
-
-                <!-- Nama -->
-
-                <h3
-                    id="profil-card-name"
-                    class="mb-0.5 text-[31px] font-black tracking-[-0.04em] text-[#211044] sm:text-[36px]"
-                >
+                <h3 id="profil-card-name" class="mb-0.5 text-[31px] font-black tracking-[-0.04em] text-[#211044] sm:text-[36px]">
                     ${escapeHTMLProfil(safiraProfileData.full_name)}
                 </h3>
 
-                <p class="mb-2 text-[17px] font-medium text-[#38245E]">
-                    Mahasiswa
+                <p id="profil-card-program" class="mb-2 text-[15px] font-medium text-[#38245E] sm:text-[17px]">
+                    ${labelProdi}
                 </p>
 
-
-                <!-- Semester -->
-
-                <span
-                    id="profil-card-semester"
-                    class="rounded-full border border-[#DCCBFF] bg-[#E5D9FF] px-7 py-1.5 text-[13px] font-extrabold text-[#38245E]"
-                >
+                <span id="profil-card-semester" class="rounded-full border border-[#DCCBFF] bg-[#E5D9FF] px-7 py-1.5 text-[13px] font-extrabold text-[#38245E]">
                     Semester ${escapeHTMLProfil(safiraProfileData.semester)}
                 </span>
-
             </div>
 
-
-            <!-- Informasi email -->
-
             <div class="relative z-10 mt-5 w-full border-t border-[#E7CCE5] pt-4">
-
                 <div class="mb-3 flex items-center gap-4">
-
                     <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#FFD8E5] bg-[#FFE7EE] text-[21px] text-[#D94761]">
                         <i class="fa-regular fa-envelope"></i>
                     </div>
 
-                    <p
-                        id="profil-card-email"
-                        class="min-w-0 truncate text-[14px] font-semibold text-[#24104F] sm:text-[15px]"
-                    >
+                    <p id="profil-card-email" class="min-w-0 truncate text-[14px] font-semibold text-[#24104F] sm:text-[15px]">
                         ${escapeHTMLProfil(safiraProfileData.email)}
                     </p>
-
                 </div>
 
                 <p class="max-w-[280px] text-[13px] font-medium leading-relaxed text-[#75618F]">
                     Profil ini digunakan untuk sapaan dan informasi akunmu.
                 </p>
-
             </div>
 
-
-            <!-- Dekorasi buku -->
-
-            <img
-                src="${PROFIL_ASSETS.books}"
-                alt=""
-                class="pointer-events-none absolute -bottom-5 -right-3 z-0 h-[125px] w-[145px] object-contain opacity-90"
-            >
-
+            <img src="${PROFIL_ASSETS.books}" alt="" class="pointer-events-none absolute -bottom-5 -right-3 z-0 h-[125px] w-[145px] object-contain opacity-90">
         </section>
     `;
 }
@@ -435,47 +307,24 @@ function renderProfilCard() {
 function renderProfilForm() {
     return `
         <section class="relative flex min-h-[520px] flex-col overflow-hidden rounded-[22px] border border-white/80 bg-gradient-to-br from-[#F5EFFF] via-[#F4EDFF] to-[#F0E9FF] p-6 shadow-sm sm:p-7 lg:p-8">
-
-            <!-- Dekorasi kanan -->
-
-            <img
-                src="${PROFIL_ASSETS.branchCorner}"
-                alt=""
-                class="pointer-events-none absolute -right-1 top-0 z-0 h-28 w-28 rotate-90 object-contain opacity-85 sm:h-32 sm:w-32"
-            >
-
-            <img
-                src="${PROFIL_ASSETS.sparkle}"
-                alt=""
-                class="pointer-events-none absolute right-[15%] top-5 z-0 h-8 w-8 object-contain"
-            >
-
-
-            <!-- Judul -->
+            <img src="${PROFIL_ASSETS.branchCorner}" alt="" class="pointer-events-none absolute -right-1 top-0 z-0 h-28 w-28 rotate-90 object-contain opacity-85 sm:h-32 sm:w-32">
+            <img src="${PROFIL_ASSETS.sparkle}" alt="" class="pointer-events-none absolute right-[15%] top-5 z-0 h-8 w-8 object-contain">
 
             <div class="relative z-10 mb-6">
-
                 <h3 class="mb-1 text-[25px] font-black tracking-[-0.035em] text-[#211044] sm:text-[29px]">
                     Informasi Profil
                 </h3>
-
                 <p class="text-[14px] font-medium text-[#66518F] sm:text-[17px]">
                     Sesuaikan data di bawah ini dengan dirimu.
                 </p>
-
             </div>
-
-
-            <!-- Form -->
 
             <form
                 id="safira-profile-form"
                 onsubmit="window.safiraSaveProfile(event)"
                 class="relative z-10 flex flex-1 flex-col"
             >
-
                 <div class="mb-8 grid grid-cols-1 gap-x-7 gap-y-6 md:grid-cols-2">
-
                     ${renderProfilInput({
                         id: "profil-nama",
                         name: "full_name",
@@ -484,7 +333,6 @@ function renderProfilForm() {
                         placeholder: "Masukkan nama lengkap"
                     })}
 
-
                     ${renderProfilInput({
                         id: "profil-email",
                         name: "email",
@@ -492,9 +340,8 @@ function renderProfilForm() {
                         type: "email",
                         value: safiraProfileData.email,
                         placeholder: "Masukkan email",
-                        help: "Email digunakan untuk masuk ke akun."
+                        help: "Email digunakan untuk informasi akun."
                     })}
-
 
                     ${renderProfilInput({
                         id: "profil-program",
@@ -505,20 +352,12 @@ function renderProfilForm() {
                         required: false
                     })}
 
-
-                    <!-- Semester -->
-
                     <div class="min-w-0">
-
-                        <label
-                            for="profil-semester"
-                            class="mb-2 block text-[14px] font-extrabold text-[#211044] sm:text-[16px]"
-                        >
+                        <label for="profil-semester" class="mb-2 block text-[14px] font-extrabold text-[#211044] sm:text-[16px]">
                             Semester
                         </label>
 
                         <div class="relative">
-
                             <select
                                 id="profil-semester"
                                 name="semester"
@@ -535,15 +374,9 @@ function renderProfilForm() {
                             </select>
 
                             <i class="fa-solid fa-chevron-down pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-[17px] text-[#705B9D]"></i>
-
                         </div>
-
                     </div>
-
                 </div>
-
-
-                <!-- Feedback -->
 
                 <div
                     id="safira-profile-feedback"
@@ -552,11 +385,7 @@ function renderProfilForm() {
                     class="mb-4 hidden rounded-xl border border-[#DCCBFF] bg-white/70 px-4 py-3 text-[13px] font-medium leading-relaxed text-[#59427E]"
                 ></div>
 
-
-                <!-- Tombol aksi -->
-
                 <div class="mt-auto flex flex-col-reverse items-stretch justify-end gap-3 border-t border-[#DCCBEA] pt-5 sm:flex-row sm:items-center">
-
                     <button
                         type="button"
                         onclick="window.safiraResetProfile()"
@@ -565,7 +394,6 @@ function renderProfilForm() {
                         Batal
                     </button>
 
-
                     <button
                         type="submit"
                         class="inline-flex min-h-[52px] items-center justify-center gap-3 rounded-[13px] border border-[#0864F7] bg-[#0864F7] px-7 text-[15px] font-bold text-white shadow-[0_5px_12px_rgba(8,100,247,.17)] transition-all hover:-translate-y-0.5 hover:bg-[#0756D8] sm:min-w-[235px]"
@@ -573,99 +401,135 @@ function renderProfilForm() {
                         <i class="fa-solid fa-check text-[18px]"></i>
                         Simpan Perubahan
                     </button>
-
                 </div>
-
             </form>
-
         </section>
     `;
 }
 
 
 // ------------------------------------------------------------
-// 8. BANNER MOTIVASI BAWAH
+// 8. KELOLA MATA KULIAH
+// ------------------------------------------------------------
+
+function renderProfilMatkul() {
+    const daftar = getDaftarMatkulGlobal();
+
+    const listHTML = daftar.length === 0
+        ? `<p class="text-[13px] font-medium text-[#77669F]">Belum ada mata kuliah. Tambahkan mata kuliah pertamamu di atas.</p>`
+        : daftar.map((item, idx) => `
+            <div class="inline-flex items-center gap-2.5 rounded-full border border-[#DCCBFF] bg-white/80 py-2 pl-4 pr-2.5 text-[14px] font-bold text-[#211044] shadow-sm">
+                <i class="fa-solid fa-book-open text-[13px] text-[#0864F7]"></i>
+                <span>${escapeHTMLProfil(item.nama)}</span>
+                <button
+                    type="button"
+                    onclick="window.safiraHapusMatkul(${idx})"
+                    aria-label="Hapus mata kuliah ${escapeHTMLProfil(item.nama)}"
+                    class="flex h-6 w-6 items-center justify-center rounded-full text-[#8B7AA8] transition-colors hover:bg-red-50 hover:text-red-500"
+                >
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+        `).join("");
+
+    return `
+        <section class="relative mt-4 overflow-hidden rounded-[22px] border border-white/80 bg-gradient-to-br from-[#F5EFFF] via-[#F9EEFC] to-[#FCEAF5] p-6 shadow-sm sm:p-7">
+            <img src="${PROFIL_ASSETS.flowerPink}" alt="" class="pointer-events-none absolute -right-2 -top-2 h-24 w-24 object-contain opacity-65">
+
+            <div class="relative z-10 mb-4">
+                <h3 class="mb-1 text-[22px] font-black tracking-[-0.035em] text-[#211044] sm:text-[26px]">
+                    Kelola Mata Kuliah
+                </h3>
+                <p class="text-[13px] font-medium text-[#66518F] sm:text-[15px]">
+                    Mata kuliah yang ditambahkan di sini otomatis muncul di Catatan, Tugas, Jadwal, dan Progres Belajar.
+                </p>
+            </div>
+
+            <form onsubmit="window.safiraTambahMatkul(event)" class="relative z-10 mb-5 flex flex-col gap-3 sm:flex-row">
+                <input
+                    id="input-matkul-baru-profil"
+                    type="text"
+                    maxlength="80"
+                    placeholder="Contoh: Algoritma & Pemrograman"
+                    class="h-[52px] flex-1 rounded-[13px] border-[1.5px] border-[#D5C5FA] bg-white/70 px-5 text-[15px] font-medium text-[#24104F] outline-none transition-all placeholder:text-[#9688B8] focus:border-[#9474D9] focus:bg-white focus:ring-2 focus:ring-[#DCCAF7]/50"
+                    required
+                >
+                <button
+                    type="submit"
+                    class="inline-flex h-[52px] items-center justify-center gap-2.5 whitespace-nowrap rounded-[13px] bg-[#0864F7] px-6 text-[14px] font-bold text-white shadow-[0_5px_12px_rgba(8,100,247,.17)] transition-all hover:-translate-y-0.5 hover:bg-[#0756D8] sm:text-[15px]"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    Tambah Mata Kuliah
+                </button>
+            </form>
+
+            <div class="relative z-10 flex flex-wrap gap-2.5">
+                ${listHTML}
+            </div>
+        </section>
+    `;
+}
+
+
+// ------------------------------------------------------------
+// 9. BANNER MOTIVASI BAWAH
 // ------------------------------------------------------------
 
 function renderProfilMotivation() {
     return `
         <section class="relative mt-4 flex min-h-[80px] items-center justify-between gap-4 overflow-hidden rounded-[20px] border border-white/80 bg-gradient-to-r from-[#FCE7F1] via-[#F9E9F9] to-[#F5E6FF] px-5 py-4 shadow-sm sm:px-7">
-
             <div class="relative z-10 flex min-w-0 items-center gap-4">
-
                 <div class="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[14px] border border-[#F6D6E9] bg-[#FFE1EE]">
-
-                    <img
-                        src="${PROFIL_ASSETS.logo}"
-                        alt=""
-                        class="h-10 w-11 object-contain"
-                    >
-
+                    <img src="${PROFIL_ASSETS.logo}" alt="" class="h-10 w-11 object-contain">
                 </div>
-
                 <p class="text-[13px] font-semibold leading-relaxed text-[#38245E] sm:text-[15px]">
                     Langkah kecil yang konsisten membuat perjalanan belajarmu lebih berarti.
                 </p>
-
             </div>
 
-            <img
-                src="${PROFIL_ASSETS.sparkles}"
-                alt=""
-                class="pointer-events-none absolute -right-1 top-1/2 h-16 w-24 -translate-y-1/2 rotate-90 object-contain opacity-90 sm:right-3"
-            >
-
+            <img src="${PROFIL_ASSETS.sparkles}" alt="" class="pointer-events-none absolute -right-1 top-1/2 h-16 w-24 -translate-y-1/2 rotate-90 object-contain opacity-90 sm:right-3">
         </section>
     `;
 }
 
 
 // ------------------------------------------------------------
-// 9. FUNGSI UTAMA RENDER PROFIL
+// 10. FUNGSI UTAMA RENDER PROFIL
 // ------------------------------------------------------------
 
 function renderProfil() {
     return `
         <div class="w-full min-w-0 font-sans text-[#211044]">
-
             ${renderProfilHeader()}
-
             ${renderProfilHero()}
-
             <div class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,2.1fr)]">
-
                 ${renderProfilCard()}
-
                 ${renderProfilForm()}
-
             </div>
-
+            ${renderProfilMatkul()}
             ${renderProfilMotivation()}
-
         </div>
     `;
 }
 
 
 // ------------------------------------------------------------
-// 10. FUNGSI PEMBARUAN DATA PROFIL
+// 11. CONTROLLER PROFIL & MATA KULIAH
 // ------------------------------------------------------------
 
 function perbaruiRingkasanProfil() {
     const nameElement = document.getElementById("profil-card-name");
     const emailElement = document.getElementById("profil-card-email");
     const semesterElement = document.getElementById("profil-card-semester");
+    const programElement = document.getElementById("profil-card-program");
 
-    if (nameElement) {
-        nameElement.textContent = safiraProfileData.full_name;
-    }
-
-    if (emailElement) {
-        emailElement.textContent = safiraProfileData.email;
-    }
-
-    if (semesterElement) {
-        semesterElement.textContent = "Semester " + safiraProfileData.semester;
+    if (nameElement) nameElement.textContent = safiraProfileData.full_name;
+    if (emailElement) emailElement.textContent = safiraProfileData.email;
+    if (semesterElement) semesterElement.textContent = "Semester " + safiraProfileData.semester;
+    if (programElement) {
+        programElement.textContent = safiraProfileData.program_studi
+            ? `Mahasiswa • ${safiraProfileData.program_studi}`
+            : "Mahasiswa";
     }
 
     document.querySelectorAll("[data-safira-profile-name]").forEach((element) => {
@@ -681,35 +545,26 @@ function perbaruiRingkasanProfil() {
     });
 }
 
-
-// ------------------------------------------------------------
-// 11. FUNGSI SIMPAN PROFIL
-// ------------------------------------------------------------
-
 window.safiraSaveProfile = function(event) {
     event.preventDefault();
 
     const form = document.getElementById("safira-profile-form");
-
     if (!form || !form.reportValidity()) return;
 
     const formData = new FormData(form);
 
-    safiraProfileData = {
+    Object.assign(safiraProfileData, {
         full_name: String(formData.get("full_name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
         program_studi: String(formData.get("program_studi") || "").trim(),
         semester: String(formData.get("semester") || "3")
-    };
+    });
 
     perbaruiRingkasanProfil();
 
     const feedback = document.getElementById("safira-profile-feedback");
-
     if (feedback) {
-        feedback.textContent =
-            "Perubahan profil diperbarui pada tampilan. Penyimpanan permanen memerlukan integrasi API.";
-
+        feedback.textContent = "Menyimpan perubahan profil ke database...";
         feedback.classList.remove("hidden");
     }
 
@@ -720,14 +575,8 @@ window.safiraSaveProfile = function(event) {
     );
 };
 
-
-// ------------------------------------------------------------
-// 12. FUNGSI BATAL / RESET FORM
-// ------------------------------------------------------------
-
 window.safiraResetProfile = function() {
     const form = document.getElementById("safira-profile-form");
-
     if (!form) return;
 
     form.elements.namedItem("full_name").value = safiraProfileData.full_name;
@@ -738,12 +587,92 @@ window.safiraResetProfile = function() {
     perbaruiRingkasanProfil();
 
     const feedback = document.getElementById("safira-profile-feedback");
-
     if (feedback) {
         feedback.textContent = "";
         feedback.classList.add("hidden");
     }
 };
+
+window.safiraTambahMatkul = function(event) {
+    if (event) event.preventDefault();
+    const input = document.getElementById("input-matkul-baru-profil");
+    if (!input) return;
+
+    const namaBaru = input.value.trim();
+    if (!namaBaru) return;
+
+    const daftar = getDaftarMatkulGlobal();
+    const sudahAda = daftar.some(
+        (m) => m.nama.toLocaleLowerCase("id-ID") === namaBaru.toLocaleLowerCase("id-ID")
+    );
+
+    if (sudahAda) {
+        alert("Mata kuliah tersebut sudah ada dalam daftar.");
+        input.focus();
+        return;
+    }
+
+    daftar.push({
+        value: String(Date.now()),
+        nama: namaBaru
+    });
+
+    window.dispatchEvent(new CustomEvent("safira:matkul-save"));
+    if (typeof window.navigate === "function") window.navigate("profil");
+};
+
+window.safiraHapusMatkul = function(index) {
+    const daftar = getDaftarMatkulGlobal();
+    if (!daftar[index]) return;
+
+    if (daftar.length <= 1) {
+        alert("Minimal harus ada 1 mata kuliah.");
+        return;
+    }
+
+    daftar.splice(index, 1);
+    window.dispatchEvent(new CustomEvent("safira:matkul-save"));
+    if (typeof window.navigate === "function") window.navigate("profil");
+};
+
+
+// ------------------------------------------------------------
+// 12. SINKRONISASI OTOMATIS DROPDOWN MATA KULIAH SEMUA HALAMAN
+// ------------------------------------------------------------
+
+function sinkronkanDropdownMatkul() {
+    const daftar = getDaftarMatkulGlobal();
+    if (daftar.length === 0) return;
+
+    // 1. Dropdown Form (Catatan, Tugas, Progres)
+    ["input-matkul-catatan", "input-matkul-tugas", "input-matkul-target"].forEach((id) => {
+        const select = document.getElementById(id);
+        if (!select) return;
+        const nilaiLama = select.value;
+        select.innerHTML =
+            `<option value="" disabled ${!nilaiLama ? "selected" : ""}>Pilih mata kuliah</option>` +
+            daftar.map((item) =>
+                `<option value="${escapeHTMLProfil(item.value)}" ${nilaiLama === item.value ? "selected" : ""}>${escapeHTMLProfil(item.nama)}</option>`
+            ).join("");
+    });
+
+    // 2. Dropdown Filter (Catatan & Tugas)
+    const filterSelects = [
+        document.getElementById("filter-matkul-catatan"),
+        document.querySelector('select[onchange*="ubahFilterMatkulTugas"]')
+    ].filter(Boolean);
+
+    filterSelects.forEach((select) => {
+        const nilaiLama = select.value || "Semua Mata Kuliah";
+        select.innerHTML =
+            `<option value="Semua Mata Kuliah" ${nilaiLama === "Semua Mata Kuliah" ? "selected" : ""}>Semua Mata Kuliah</option>` +
+            daftar.map((item) =>
+                `<option value="${escapeHTMLProfil(item.nama)}" ${nilaiLama === item.nama ? "selected" : ""}>${escapeHTMLProfil(item.nama)}</option>`
+            ).join("");
+    });
+}
+
+window.addEventListener("safira:pagechange", sinkronkanDropdownMatkul);
 
 
 // ------------------------------------------------------------
@@ -751,8 +680,3 @@ window.safiraResetProfile = function() {
 // ------------------------------------------------------------
 
 window.renderProfil = renderProfil;
-
-
-// ============================================================
-// AKHIR FILE PROFIL.JS
-// ============================================================
