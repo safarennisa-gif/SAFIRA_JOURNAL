@@ -33,6 +33,7 @@ async function simpanSemuaDataKeCloud() {
             tugas: typeof daftarTugas !== "undefined" ? daftarTugas : [],
             jadwal: typeof daftarJadwal !== "undefined" ? daftarJadwal : [],
             target: typeof daftarTarget !== "undefined" ? daftarTarget : [],
+            matkul: typeof daftarMataKuliah !== "undefined" ? daftarMataKuliah : [],
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
         console.log("Data SAFIRA berhasil tersimpan ke Firestore.");
@@ -67,6 +68,9 @@ async function muatDataDariCloud(user) {
             }
             if (Array.isArray(data.target) && typeof daftarTarget !== "undefined") {
                 daftarTarget.splice(0, daftarTarget.length, ...data.target);
+            }
+            if (Array.isArray(data.matkul) && typeof daftarMataKuliah !== "undefined") {
+                daftarMataKuliah.splice(0, daftarMataKuliah.length, ...data.matkul);
             }
         } else {
             // Akun baru: sinkronkan nama & email lalu simpan data awal
@@ -239,4 +243,8 @@ window.addEventListener("safira:profile-save", () => {
     if (feedback) {
         feedback.textContent = "Perubahan profil berhasil disimpan ke cloud.";
     }
+});
+
+window.addEventListener("safira:matkul-save", () => {
+    simpanSemuaDataKeCloud();
 });
