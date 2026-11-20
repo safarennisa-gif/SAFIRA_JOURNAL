@@ -513,8 +513,11 @@ function renderDashboard() {
                         ${targetHTML}
                     </div>
                 </div>
-            </div>
-        </div>
+                </div>
+            window.addEventListener("safira:matkul-save", () => {
+            simpanSemuaDataKeCloud();
+            });
+                </div>
     `;
 }
 

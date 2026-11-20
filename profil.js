@@ -618,6 +618,9 @@ window.safiraTambahMatkul = function(event) {
     });
 
     window.dispatchEvent(new CustomEvent("safira:matkul-save"));
+    if (typeof window.simpanSemuaDataKeCloud === "function") {
+        window.simpanSemuaDataKeCloud();
+    }
     if (typeof window.navigate === "function") window.navigate("profil");
 };
 
@@ -632,31 +635,46 @@ window.safiraHapusMatkul = function(index) {
 
     daftar.splice(index, 1);
     window.dispatchEvent(new CustomEvent("safira:matkul-save"));
+    if (typeof window.simpanSemuaDataKeCloud === "function") {
+        window.simpanSemuaDataKeCloud();
+    }
     if (typeof window.navigate === "function") window.navigate("profil");
 };
 
-
-// ------------------------------------------------------------
-// 12. SINKRONISASI OTOMATIS DROPDOWN MATA KULIAH SEMUA HALAMAN
-// ------------------------------------------------------------
-
+// Sinkronkan semua dropdown mata kuliah & pertahankan nilai saat mode Edit
 function sinkronkanDropdownMatkul() {
     const daftar = getDaftarMatkulGlobal();
     if (daftar.length === 0) return;
 
-    // 1. Dropdown Form (Catatan, Tugas, Progres)
-    ["input-matkul-catatan", "input-matkul-tugas", "input-matkul-target"].forEach((id) => {
+    const formMap = [
+        {
+            id: "input-matkul-catatan",
+            val: (typeof editIndexCatatan !== "undefined" && editIndexCatatan >= 0 && daftarCatatan[editIndexCatatan])
+                ? daftarCatatan[editIndexCatatan].matkul_val : ""
+        },
+        {
+            id: "input-matkul-tugas",
+            val: (typeof editIndexTugas !== "undefined" && editIndexTugas >= 0 && daftarTugas[editIndexTugas])
+                ? daftarTugas[editIndexTugas].matkul_val : ""
+        },
+        {
+            id: "input-matkul-target",
+            val: (typeof editIndexTarget !== "undefined" && editIndexTarget >= 0 && daftarTarget[editIndexTarget])
+                ? daftarTarget[editIndexTarget].matkul_val : ""
+        }
+    ];
+
+    formMap.forEach(({ id, val }) => {
         const select = document.getElementById(id);
         if (!select) return;
-        const nilaiLama = select.value;
+        const selected = val || select.value;
         select.innerHTML =
-            `<option value="" disabled ${!nilaiLama ? "selected" : ""}>Pilih mata kuliah</option>` +
+            `<option value="" disabled ${!selected ? "selected" : ""}>Pilih mata kuliah</option>` +
             daftar.map((item) =>
-                `<option value="${escapeHTMLProfil(item.value)}" ${nilaiLama === item.value ? "selected" : ""}>${escapeHTMLProfil(item.nama)}</option>`
+                `<option value="${escapeHTMLProfil(item.value)}" ${selected === item.value ? "selected" : ""}>${escapeHTMLProfil(item.nama)}</option>`
             ).join("");
     });
 
-    // 2. Dropdown Filter (Catatan & Tugas)
     const filterSelects = [
         document.getElementById("filter-matkul-catatan"),
         document.querySelector('select[onchange*="ubahFilterMatkulTugas"]')
@@ -671,6 +689,8 @@ function sinkronkanDropdownMatkul() {
             ).join("");
     });
 }
+
+window.addEventListener("safira:pagechange", sinkronkanDropdownMatkul);
 
 window.addEventListener("safira:pagechange", sinkronkanDropdownMatkul);
 

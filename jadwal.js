@@ -93,22 +93,14 @@ const ASET_JADWAL = {
 // ============================================================
 
 const daftarSemester = [
-    {
-        value: "Semester 1",
-        label: "Semester 1 · Ganjil 2025/2026"
-    },
-    {
-        value: "Semester 2",
-        label: "Semester 2 · Genap 2025/2026"
-    },
-    {
-        value: "Semester 3",
-        label: "Semester 3 · Ganjil 2026/2027"
-    },
-    {
-        value: "Semester 4",
-        label: "Semester 4 · Genap 2026/2027"
-    }
+    { value: "Semester 1", label: "Semester 1 · Ganjil" },
+    { value: "Semester 2", label: "Semester 2 · Genap" },
+    { value: "Semester 3", label: "Semester 3 · Ganjil" },
+    { value: "Semester 4", label: "Semester 4 · Genap" },
+    { value: "Semester 5", label: "Semester 5 · Ganjil" },
+    { value: "Semester 6", label: "Semester 6 · Genap" },
+    { value: "Semester 7", label: "Semester 7 · Ganjil" },
+    { value: "Semester 8", label: "Semester 8 · Genap" }
 ];
 
 const daftarHari = [
@@ -1855,6 +1847,12 @@ window.batalFormJadwal = function() {
 window.renderJadwal = renderJadwal;
 
 window.renderTambahJadwal = renderTambahJadwal;
+
+// Sinkronkan filter semester jadwal setiap kali profil diperbarui
+window.addEventListener("safira:profile-save", function (event) {
+    const sem = event.detail?.semester || (typeof safiraProfileData !== "undefined" ? safiraProfileData.semester : "3");
+    filterSemester = "Semester " + sem;
+});
 
 
 // ============================================================
