@@ -1,4 +1,3 @@
-
 // ============================================================
 // SAFIRA — AUTHENTICATION & PUBLIC PAGES
 // Revisi tampilan: Landing, Fitur, Login, dan Daftar
@@ -111,7 +110,7 @@ function renderSafiraPublicNav(active = "landing") {
                         onclick="switchAuthView('fitur')"
                         class="relative py-2 transition-colors ${
                             active === "fitur"
-                                ? "text-[#0864F7] after:absolute after:bottom-0 after:left-1/2 after:h-[3px] after:w-14 after:-translate-x-1/2 after:rounded-full after:after:bg-[#0864F7]"
+                                ? "text-[#0864F7] after:absolute after:bottom-0 after:left-1/2 after:h-[3px] after:w-14 after:-translate-x-1/2 after:rounded-full after:bg-[#0864F7]"
                                 : "text-[#24104F] hover:text-[#0864F7]"
                         }"
                     >
@@ -188,7 +187,7 @@ function renderSafiraFooter(showCenter = false) {
     return `
         <footer class="relative z-10 mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[#DCC8EA] px-2 pt-3 text-[12px] font-medium text-[#66518C] sm:text-[13px]">
 
-            <p>&copy; 2026 SAFIRA</p>
+            <p>© 2026 SAFIRA</p>
 
             ${showCenter ? `
                 <img
@@ -331,7 +330,7 @@ window.toggleAuthPassword = function (inputId, button) {
 
 function renderSafiraLanding() {
     return `
-        <div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#F7E6FF] via-[#F1DFFF] to-[#FCE5F1] font-sans text-[#24104F]">
+        <div class="relative min-h-screen overflow-x-hidden bg-gradient-to-br from-[#F7E6FF] via-[#F1DFFF] to-[#FCE5F1] font-sans text-[#24104F]">
 
             ${renderSafiraOuterDecorations()}
 
@@ -343,7 +342,7 @@ function renderSafiraLanding() {
                 <section class="relative z-10 order-2 max-w-[650px] lg:order-1">
 
                     <span class="mb-5 inline-flex items-center rounded-full border border-[#D9BDF5] bg-[#DCC4FA]/80 px-5 py-2 text-[13px] font-semibold text-[#62469A] sm:text-[15px]">
-                        Digital Academic Journal &amp; Personal Planner
+                        Digital Academic Journal & Personal Planner
                     </span>
 
                     <h1 class="mb-5 text-[42px] font-black leading-[1.08] tracking-[-0.045em] text-[#211044] sm:text-[52px] lg:text-[56px] xl:text-[64px]">
@@ -562,7 +561,7 @@ function renderSafiraLanding() {
                         </div>
 
                         <h3 class="mb-1 text-[17px] font-extrabold text-[#24104F]">
-                            Tugas &amp; Deadline
+                            Tugas & Deadline
                         </h3>
 
                         <p class="max-w-[280px] text-[14px] font-medium leading-relaxed text-[#75618F]">
@@ -636,7 +635,7 @@ function renderSafiraLanding() {
 
 function renderSafiraFitur() {
     return `
-        <div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#F8E8FF] via-[#F1E1FF] to-[#FBE9F4] font-sans text-[#24104F]">
+        <div class="relative min-h-screen overflow-x-hidden bg-gradient-to-br from-[#F8E8FF] via-[#F1E1FF] to-[#FBE9F4] font-sans text-[#24104F]">
 
             ${renderSafiraOuterDecorations()}
 
@@ -825,7 +824,7 @@ function renderSafiraFitur() {
                             </div>
 
                             <h2 class="mb-2 text-[20px] font-extrabold text-[#24104F]">
-                                Tugas &amp; Deadline
+                                Tugas & Deadline
                             </h2>
 
                             <p class="max-w-[240px] text-[14px] font-medium leading-relaxed text-[#74618F]">
@@ -1189,7 +1188,7 @@ function renderSafiraAuthPage(mode = "login") {
 
 
     return `
-        <div class="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-[#F9E9F7] via-[#F7E0F5] to-[#FBE6F1] px-4 py-4 font-sans text-[#24104F] sm:px-6 sm:py-5 lg:px-[4.3vw]">
+        <div class="relative flex min-h-screen flex-col overflow-x-hidden bg-gradient-to-br from-[#F9E9F7] via-[#F7E0F5] to-[#FBE6F1] px-4 py-4 font-sans text-[#24104F] sm:px-6 sm:py-5 lg:px-[4.3vw]">
 
             ${renderSafiraOuterDecorations()}
 
