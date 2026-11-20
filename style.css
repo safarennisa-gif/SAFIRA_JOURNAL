@@ -850,3 +850,25 @@ img[src*="kilauan"] {
 #login-container input {
     border-color: rgba(126, 91, 183, 0.34);
 }
+
+/* =========================================================
+   SIDEBAR FIT-TO-SCREEN (TANPA SCROLL, KELUAR SELALU TAMPAK)
+   ========================================================= */
+
+#app-sidebar #nav-menu {
+    gap: 4px !important;
+}
+
+#app-sidebar .menu-item {
+    min-height: 42px !important;
+    padding: 8px 14px !important;
+    font-size: 14.5px !important;
+}
+
+/* Jika layar laptop/jendela browser sangat pendek, sembunyikan ilustrasi tengah
+   agar kutipan dan tombol Keluar tidak pernah terpotong */
+@media (max-height: 640px) {
+    #app-sidebar .safira-sidebar-illust {
+        display: none !important;
+    }
+}
