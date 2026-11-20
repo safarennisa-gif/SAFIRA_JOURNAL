@@ -1,5 +1,5 @@
 // ============================================================
-// SAFIRA — HALAMAN PROFIL & KELOLA MATA KULIAH (FIREBASE READY)
+// SAFIRA — HALAMAN PROFIL, AVATAR & KELOLA MATA KULIAH
 // Struktur aset tetap menggunakan folder: aset/
 // ============================================================
 
@@ -37,7 +37,8 @@ let safiraProfileData = {
     full_name: "Safira",
     email: "safira@example.com",
     program_studi: "",
-    semester: "3"
+    semester: "3",
+    avatar: ""
 };
 
 
@@ -60,6 +61,10 @@ function getDaftarMatkulGlobal() {
         return daftarMataKuliah;
     }
     return [];
+}
+
+function getSafiraAvatarUrl() {
+    return safiraProfileData.avatar || PROFIL_ASSETS.avatar;
 }
 
 
@@ -113,6 +118,8 @@ function renderProfilInput({
 // ------------------------------------------------------------
 
 function renderProfilHeader() {
+    const avatarUrl = getSafiraAvatarUrl();
+
     return `
         <header class="relative z-30 mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="text-[30px] font-black tracking-[-0.04em] text-[#211044] sm:text-[38px]">
@@ -135,7 +142,8 @@ function renderProfilHeader() {
                     class="relative z-50 flex items-center gap-3 rounded-full px-2 py-1 transition-colors hover:bg-white/40"
                 >
                     <img
-                        src="${PROFIL_ASSETS.avatar}"
+                        data-safira-avatar="true"
+                        src="${avatarUrl}"
                         alt="Foto profil ${escapeHTMLProfil(safiraProfileData.full_name)}"
                         class="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm sm:h-11 sm:w-11"
                     >
@@ -162,7 +170,8 @@ function renderProfilHeader() {
                 >
                     <div class="flex items-center gap-4 border-b border-[#F0E7F8] p-5">
                         <img
-                            src="${PROFIL_ASSETS.avatar}"
+                            data-safira-avatar="true"
+                            src="${avatarUrl}"
                             alt=""
                             class="h-14 w-14 shrink-0 rounded-full border-2 border-purple-100 object-cover shadow-sm"
                         >
@@ -246,7 +255,7 @@ function renderProfilHero() {
 
 
 // ------------------------------------------------------------
-// 6. KARTU RINGKASAN PROFIL
+// 6. KARTU RINGKASAN PROFIL (DENGAN UPLOAD AVATAR)
 // ------------------------------------------------------------
 
 function renderProfilCard() {
@@ -261,8 +270,28 @@ function renderProfilCard() {
             <img src="${PROFIL_ASSETS.sparkle}" alt="" class="pointer-events-none absolute right-[22%] top-5 h-7 w-7 object-contain">
 
             <div class="relative z-10 flex w-full flex-col items-center text-center">
-                <div class="mb-3 h-[185px] w-[185px] overflow-hidden rounded-full border-[4px] border-white bg-[#E4D8FF] shadow-[0_5px_18px_rgba(92,59,143,.14)] sm:h-[205px] sm:w-[205px]">
-                    <img src="${PROFIL_ASSETS.avatar}" alt="Foto profil" class="h-full w-full object-cover">
+                <div class="relative mb-3">
+                    <div class="h-[185px] w-[185px] overflow-hidden rounded-full border-[4px] border-white bg-[#E4D8FF] shadow-[0_5px_18px_rgba(92,59,143,.14)] sm:h-[205px] sm:w-[205px]">
+                        <img id="profil-card-avatar" data-safira-avatar="true" src="${getSafiraAvatarUrl()}" alt="Foto profil" class="h-full w-full object-cover">
+                    </div>
+
+                    <input
+                        id="input-avatar-profil"
+                        type="file"
+                        accept="image/*"
+                        onchange="window.safiraUbahAvatar(event)"
+                        class="hidden"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="document.getElementById('input-avatar-profil').click()"
+                        aria-label="Ubah foto profil"
+                        title="Ubah foto profil"
+                        class="absolute bottom-2 right-2 flex h-11 w-11 items-center justify-center rounded-full border-2 border-white bg-[#0864F7] text-white shadow-md transition-all hover:bg-[#0756D8]"
+                    >
+                        <i class="fa-solid fa-camera text-[16px]"></i>
+                    </button>
                 </div>
 
                 <h3 id="profil-card-name" class="mb-0.5 text-[31px] font-black tracking-[-0.04em] text-[#211044] sm:text-[36px]">
@@ -514,7 +543,7 @@ function renderProfil() {
 
 
 // ------------------------------------------------------------
-// 11. CONTROLLER PROFIL & MATA KULIAH
+// 11. CONTROLLER PROFIL, AVATAR & MATA KULIAH
 // ------------------------------------------------------------
 
 function perbaruiRingkasanProfil() {
@@ -543,6 +572,8 @@ function perbaruiRingkasanProfil() {
     document.querySelectorAll("[data-safira-profile-semester]").forEach((element) => {
         element.textContent = safiraProfileData.semester;
     });
+
+    sinkronkanAvatarSemuaHalaman();
 }
 
 window.safiraSaveProfile = function(event) {
@@ -593,6 +624,53 @@ window.safiraResetProfile = function() {
     }
 };
 
+window.safiraUbahAvatar = function(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("Mohon pilih file gambar (JPG, PNG, atau WebP).");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const size = 256;
+            const canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext("2d");
+
+            // Crop persegi tepat di tengah agar foto tidak gepeng
+            const minSide = Math.min(img.width, img.height);
+            const sx = (img.width - minSide) / 2;
+            const sy = (img.height - minSide) / 2;
+            ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+            // Kompres ke JPEG (~15-30 KB) lalu simpan ke Firestore
+            safiraProfileData.avatar = canvas.toDataURL("image/jpeg", 0.8);
+            sinkronkanAvatarSemuaHalaman();
+
+            window.dispatchEvent(new CustomEvent("safira:profile-save", {
+                detail: { ...safiraProfileData }
+            }));
+            if (typeof window.simpanSemuaDataKeCloud === "function") {
+                window.simpanSemuaDataKeCloud();
+            }
+
+            const feedback = document.getElementById("safira-profile-feedback");
+            if (feedback) {
+                feedback.textContent = "Foto profil berhasil diperbarui dan disimpan.";
+                feedback.classList.remove("hidden");
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+};
+
 window.safiraTambahMatkul = function(event) {
     if (event) event.preventDefault();
     const input = document.getElementById("input-matkul-baru-profil");
@@ -641,7 +719,11 @@ window.safiraHapusMatkul = function(index) {
     if (typeof window.navigate === "function") window.navigate("profil");
 };
 
-// Sinkronkan semua dropdown mata kuliah & pertahankan nilai saat mode Edit
+
+// ------------------------------------------------------------
+// 12. SINKRONISASI OTOMATIS MATA KULIAH & AVATAR SEMUA HALAMAN
+// ------------------------------------------------------------
+
 function sinkronkanDropdownMatkul() {
     const daftar = getDaftarMatkulGlobal();
     if (daftar.length === 0) return;
@@ -690,9 +772,18 @@ function sinkronkanDropdownMatkul() {
     });
 }
 
-window.addEventListener("safira:pagechange", sinkronkanDropdownMatkul);
+function sinkronkanAvatarSemuaHalaman() {
+    const url = getSafiraAvatarUrl();
+    document.querySelectorAll('img[src*="aset/avatar.png"], img[data-safira-avatar]').forEach((img) => {
+        img.setAttribute("data-safira-avatar", "true");
+        img.src = url;
+    });
+}
 
-window.addEventListener("safira:pagechange", sinkronkanDropdownMatkul);
+window.addEventListener("safira:pagechange", function() {
+    sinkronkanDropdownMatkul();
+    sinkronkanAvatarSemuaHalaman();
+});
 
 
 // ------------------------------------------------------------
