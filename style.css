@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
 /* =========================================================
-   SAFIRA — GLOBAL DESIGN SYSTEM
-   Referensi: layout terbaru SAFIRA Academic Journal
+   1. IMPORTS & DESIGN TOKENS (:root)
    ========================================================= */
 
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap");
 
 :root {
+    /* Palet Warna Utama */
     --safira-ink: #211044;
     --safira-ink-soft: #49376d;
     --safira-muted: #75649b;
@@ -17,9 +17,29 @@
     --safira-lavender-soft: #eee5ff;
     --safira-pink-soft: #fbe7f3;
     --safira-border: rgba(255, 255, 255, 0.86);
+
+    /* Layout & Bayangan */
     --safira-sidebar-width: 273px;
     --safira-shadow: 0 8px 28px rgba(73, 43, 120, 0.08);
+
+    /* Container Borders */
+    --safira-container-line: rgba(126, 91, 183, 0.28);
+    --safira-container-line-hover: rgba(126, 91, 183, 0.44);
+    --safira-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+
+    /* Soft & Warm Glow */
+    --safira-glow-warm: rgba(255, 232, 209, 0.58);
+    --safira-glow-cream: rgba(255, 245, 228, 0.72);
+    --safira-glow-blue: rgba(8, 100, 247, 0.28);
+
+    /* Kurva Animasi */
+    --safira-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --safira-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* =========================================================
+   2. BASE & RESET STYLES
+   ========================================================= */
 
 * {
     box-sizing: border-box;
@@ -48,6 +68,11 @@ body.safira-body {
         radial-gradient(circle at 8% 10%, rgba(255, 255, 255, 0.45), transparent 28%),
         linear-gradient(125deg, #e9ddff 0%, #f9e8f6 52%, #e9ddff 100%);
     overflow-x: hidden;
+}
+
+::selection {
+    background-color: rgba(188, 164, 237, 0.45);
+    color: var(--safira-ink);
 }
 
 .font-sans {
@@ -84,7 +109,7 @@ img {
 }
 
 /* =========================================================
-   AUTHENTICATION / PUBLIC PAGES
+   3. AUTHENTICATION / PUBLIC PAGES
    ========================================================= */
 
 #login-container.safira-auth-root {
@@ -92,8 +117,7 @@ img {
     width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
-    background:
-        linear-gradient(135deg, #f4e7ff 0%, #fce6f4 54%, #eee4ff 100%);
+    background: linear-gradient(135deg, #f4e7ff 0%, #fce6f4 54%, #eee4ff 100%);
 }
 
 #login-container.hidden,
@@ -102,7 +126,7 @@ img {
 }
 
 /* =========================================================
-   APP SHELL
+   4. APP SHELL
    ========================================================= */
 
 #app-container.safira-app {
@@ -121,8 +145,13 @@ img {
     display: flex !important;
 }
 
+.safira-mobilebar,
+.safira-sidebar-overlay {
+    display: none;
+}
+
 /* =========================================================
-   SIDEBAR
+   5. SIDEBAR (FIT-TO-SCREEN & WARM GLOW)
    ========================================================= */
 
 #app-sidebar.safira-sidebar {
@@ -137,37 +166,38 @@ img {
     min-height: 0;
     overflow: hidden;
     color: var(--safira-ink);
-    background:
-        linear-gradient(180deg, #bca4ed 0%, #cbb9f2 48%, #b99ee8 100%);
-    border-right: 1px solid rgba(255, 255, 255, 0.66);
-    box-shadow: 5px 0 22px rgba(71, 45, 124, 0.045);
+    background: linear-gradient(180deg, #bca4ed 0%, #cbb9f2 48%, #b99ee8 100%);
+    border-right: 1.5px solid rgba(117, 100, 155, 0.28);
+    box-shadow:
+        6px 0 28px rgba(71, 45, 124, 0.06),
+        2px 0 24px rgba(255, 232, 209, 0.32);
     transition: transform 0.28s ease;
 }
 
 #app-sidebar #nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 4px !important;
 }
 
 #app-sidebar .menu-item {
     display: flex;
     align-items: center;
     width: 100%;
-    min-height: 53px;
-    padding: 11px 15px;
+    min-height: 42px !important;
+    padding: 8px 14px !important;
     gap: 13px;
     border-radius: 15px;
     color: #1e1647 !important;
-    font-size: 15px;
+    font-size: 14.5px !important;
     font-weight: 700;
     line-height: 1.25;
     text-decoration: none;
     transition:
-        background-color 0.18s ease,
-        color 0.18s ease,
-        box-shadow 0.18s ease,
-        transform 0.18s ease;
+        background-color 0.22s ease,
+        color 0.22s ease,
+        box-shadow 0.24s var(--safira-ease-smooth),
+        transform 0.24s var(--safira-ease-smooth);
 }
 
 #app-sidebar .menu-item i {
@@ -175,19 +205,33 @@ img {
     width: 22px;
     font-size: 19px;
     text-align: center;
+    transition: transform 0.26s var(--safira-ease-bounce);
 }
 
 #app-sidebar .menu-item:hover:not(.is-active):not(.bg-brand-purple) {
     color: #1e1647 !important;
     background: rgba(255, 255, 255, 0.42) !important;
-    transform: translateX(2px);
+    transform: translateX(4px);
+    box-shadow:
+        0 4px 16px rgba(255, 245, 228, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+#app-sidebar .menu-item:hover i {
+    transform: scale(1.12);
+}
+
+#app-sidebar .menu-item:active {
+    transform: scale(0.98) !important;
 }
 
 #app-sidebar .menu-item.is-active,
 #app-sidebar .menu-item.bg-brand-purple {
     color: #fff !important;
     background: linear-gradient(105deg, #0873ff 0%, #1761ed 100%) !important;
-    box-shadow: 0 7px 17px rgba(8, 100, 247, 0.24) !important;
+    box-shadow:
+        0 8px 20px var(--safira-glow-blue),
+        0 0 18px rgba(255, 240, 224, 0.45) !important;
 }
 
 #app-sidebar .menu-item.is-active i,
@@ -201,7 +245,7 @@ img {
 }
 
 /* =========================================================
-   MAIN CONTENT
+   6. MAIN CONTENT & SCROLLBAR
    ========================================================= */
 
 #app-content.safira-main {
@@ -242,7 +286,6 @@ img {
     background-clip: padding-box;
 }
 
-/* Hindari elemen lebar mendorong seluruh halaman ke samping. */
 #app-content > div,
 #app-content section,
 #app-content header {
@@ -254,19 +297,7 @@ img {
 }
 
 /* =========================================================
-   MOBILE NAVIGATION
-   ========================================================= */
-
-.safira-mobilebar {
-    display: none;
-}
-
-.safira-sidebar-overlay {
-    display: none;
-}
-
-/* =========================================================
-   BRAND COMPONENTS
+   7. BRAND COMPONENTS & CONTAINER BORDERS
    ========================================================= */
 
 .text-brand-text {
@@ -278,8 +309,7 @@ img {
 }
 
 .bg-brand-sidebar {
-    background:
-        linear-gradient(180deg, #bca4ed 0%, #cbb9f2 48%, #b99ee8 100%) !important;
+    background: linear-gradient(180deg, #bca4ed 0%, #cbb9f2 48%, #b99ee8 100%) !important;
 }
 
 .bg-brand-purple {
@@ -292,8 +322,11 @@ img {
 }
 
 .hero-gradient {
-    background:
-        linear-gradient(110deg, #e7d9ff 0%, #f2e7ff 48%, #f8e2f3 100%) !important;
+    background: linear-gradient(110deg, #e7d9ff 0%, #f2e7ff 48%, #f8e2f3 100%) !important;
+    box-shadow:
+        0 10px 30px rgba(73, 43, 120, 0.06),
+        0 0 32px rgba(255, 232, 209, 0.42),
+        inset 0 0 28px rgba(255, 248, 236, 0.55) !important;
 }
 
 .card-shadow {
@@ -312,7 +345,18 @@ img {
     box-shadow: 2px 8px 17px rgba(43, 26, 73, 0.12) !important;
 }
 
-/* Pesan fallback jika renderer halaman gagal. */
+/* Garis Container Tegas & Lembut */
+#app-content section[class*="border"],
+#app-content div[class*="border-white"],
+#login-container main[class*="border-white"],
+#login-container section[class*="border-white"] {
+    border-color: var(--safira-container-line) !important;
+    box-shadow:
+        var(--safira-inner-highlight),
+        0 6px 20px rgba(73, 43, 120, 0.06);
+}
+
+/* Fallback Error Renderer */
 .safira-render-error {
     max-width: 680px;
     margin: 60px auto;
@@ -346,9 +390,225 @@ img {
 }
 
 /* =========================================================
-   TABLET
+   8. MICRO-INTERACTIONS, WARM GLOW & LISTS
    ========================================================= */
 
+/* Tombol & Tautan */
+button,
+a,
+[role="menuitem"] {
+    transition:
+        transform 0.22s var(--safira-ease-smooth),
+        box-shadow 0.22s var(--safira-ease-smooth),
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+button:not(:disabled):hover {
+    transform: translateY(-1.5px);
+    box-shadow:
+        0 8px 20px rgba(73, 43, 120, 0.08),
+        0 0 18px var(--safira-glow-warm);
+}
+
+button[class*="bg-[#0864F7]"]:not(:disabled):hover,
+button[class*="bg-[#1D63DC]"]:not(:disabled):hover {
+    box-shadow:
+        0 8px 22px var(--safira-glow-blue),
+        0 0 20px rgba(255, 236, 214, 0.55);
+}
+
+button:not(:disabled):active,
+a:active {
+    transform: translateY(0) scale(0.97) !important;
+    transition-duration: 0.08s;
+}
+
+/* Kartu & Elemen Klik */
+#app-content article {
+    border-color: var(--safira-container-line) !important;
+    box-shadow:
+        var(--safira-inner-highlight),
+        0 4px 16px rgba(73, 43, 120, 0.055);
+}
+
+#app-content article,
+#app-content .cursor-pointer {
+    transition:
+        transform 0.26s var(--safira-ease-smooth),
+        box-shadow 0.26s var(--safira-ease-smooth),
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        filter 0.2s ease;
+    will-change: transform;
+}
+
+#app-content article:hover,
+#app-content .cursor-pointer:hover {
+    transform: translateY(-3px);
+    border-color: var(--safira-container-line-hover) !important;
+    box-shadow:
+        0 12px 26px rgba(73, 43, 120, 0.08),
+        0 0 24px var(--safira-glow-warm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+#app-content .cursor-pointer:active {
+    transform: translateY(-1px) scale(0.985) !important;
+    transition-duration: 0.08s;
+}
+
+/* Input, Select & Textarea */
+input,
+select,
+textarea {
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.22s var(--safira-ease-smooth),
+        background-color 0.2s ease,
+        transform 0.2s var(--safira-ease-smooth);
+}
+
+#app-content input,
+#app-content select,
+#app-content textarea,
+#login-container input {
+    border-color: rgba(126, 91, 183, 0.34);
+}
+
+select:hover:not(:disabled),
+input:hover:not(:disabled):not(:focus),
+textarea:hover:not(:disabled):not(:focus) {
+    box-shadow: 0 4px 12px rgba(73, 43, 120, 0.06);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    box-shadow:
+        0 0 0 3px rgba(220, 202, 247, 0.45),
+        0 0 18px var(--safira-glow-cream) !important;
+}
+
+/* Baris Daftar Tugas (tugas.js) */
+#app-content .space-y-1\.5 > div.grid {
+    border-color: rgba(126, 91, 183, 0.24) !important;
+    transition:
+        transform 0.24s var(--safira-ease-smooth),
+        box-shadow 0.24s var(--safira-ease-smooth),
+        border-color 0.2s ease,
+        filter 0.2s ease;
+    will-change: transform;
+}
+
+#app-content .space-y-1\.5 > div.grid:hover {
+    position: relative;
+    z-index: 2;
+    transform: translateY(-2px);
+    border-color: var(--safira-container-line-hover) !important;
+    box-shadow:
+        0 10px 22px rgba(73, 43, 120, 0.07),
+        0 0 22px var(--safira-glow-warm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+#app-content .space-y-1\.5 > div.grid > span.rounded-r-full {
+    transition: width 0.22s var(--safira-ease-smooth), box-shadow 0.22s ease;
+}
+
+#app-content .space-y-1\.5 > div.grid:hover > span.rounded-r-full {
+    width: 8px;
+}
+
+/* Baris Tabel Jadwal Mingguan (jadwal.js) */
+#app-content tbody tr {
+    border-bottom-color: rgba(126, 91, 183, 0.2) !important;
+    transition:
+        background-color 0.22s ease,
+        box-shadow 0.24s var(--safira-ease-smooth),
+        transform 0.24s var(--safira-ease-smooth);
+}
+
+#app-content tbody tr:hover {
+    position: relative;
+    z-index: 2;
+    transform: translateX(3px);
+    box-shadow:
+        inset 4px 0 0 rgba(8, 100, 247, 0.18),
+        inset 0 0 24px rgba(255, 232, 209, 0.5),
+        0 4px 14px rgba(73, 43, 120, 0.05);
+}
+
+#app-content .space-y-1\.5 > div.grid button:hover,
+#app-content tbody tr button:hover {
+    transform: translateY(-1.5px) scale(1.08);
+}
+
+/* =========================================================
+   9. KEYFRAME ANIMATIONS
+   ========================================================= */
+
+@keyframes safiraPageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#app-content > * {
+    animation: safiraPageEnter 0.28s var(--safira-ease-smooth) both;
+}
+
+@keyframes safiraModalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+div.fixed.inset-0[class*="backdrop-blur"] > div,
+div.fixed.inset-0[class*="backdrop-blur"] > section {
+    animation: safiraModalPop 0.22s var(--safira-ease-smooth) both;
+}
+
+@keyframes safiraWarmTwinkle {
+    0%, 100% {
+        filter: drop-shadow(0 0 4px rgba(255, 236, 186, 0.55));
+        opacity: 0.82;
+    }
+    50% {
+        filter: drop-shadow(0 0 9px rgba(255, 226, 168, 0.9));
+        opacity: 1;
+    }
+}
+
+img[src*="bintang"],
+img[src*="kilauan"] {
+    animation: safiraWarmTwinkle 4.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   10. RESPONSIVE: TABLET, SHORT SCREEN & MOBILE
+   ========================================================= */
+
+/* Layar Laptop / Jendela Pendek */
+@media (max-height: 640px) {
+    #app-sidebar .safira-sidebar-illust {
+        display: none !important;
+    }
+}
+
+/* Tablet (<= 1100px) */
 @media (max-width: 1100px) {
     :root {
         --safira-sidebar-width: 248px;
@@ -359,21 +619,33 @@ img {
     }
 
     #app-sidebar .menu-item {
-        min-height: 50px;
-        padding: 10px 13px;
-        font-size: 14px;
+        padding: 8px 13px !important;
+        font-size: 14px !important;
     }
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
+/* Mobile / HP (<= 767px) */
 @media (max-width: 767px) {
     body.safira-body {
-        min-height: 100vh;
+        height: auto !important;
         min-height: 100dvh;
-        overflow: hidden;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.safira-body:has(#app-container:not(.hidden)),
+    body.safira-sidebar-open {
+        height: 100dvh !important;
+        overflow: hidden !important;
+    }
+
+    #login-container.safira-auth-root {
+        height: auto !important;
+        min-height: 100dvh;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        padding-bottom: 32px;
     }
 
     #app-container.safira-app:not(.hidden) {
@@ -446,6 +718,7 @@ img {
         min-width: 0;
         height: 100vh;
         height: 100dvh;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
         overflow-x: hidden;
         overflow-y: auto;
         transform: translateX(-105%);
@@ -478,25 +751,44 @@ img {
         width: 100%;
         height: calc(100vh - 62px);
         height: calc(100dvh - 62px);
-        padding: 17px 14px 26px;
+        padding: 17px 14px calc(28px + env(safe-area-inset-bottom, 0px));
         overflow-x: hidden;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
-    #app-sidebar #nav-menu {
-        gap: 6px;
+    #app-content .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
     }
 
-    #app-sidebar .menu-item {
-        min-height: 49px;
-        font-size: 14px;
+    #app-content header {
+        gap: 10px !important;
+        margin-bottom: 14px !important;
     }
 
-    body.safira-sidebar-open {
-        overflow: hidden;
+    #app-content header h2 {
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+    }
+
+    #profile-dropdown {
+        right: 0 !important;
+        max-width: calc(100vw - 28px) !important;
+    }
+
+    #app-content section,
+    #app-content article {
+        max-width: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px !important;
     }
 }
 
+/* Mobile Kecil (<= 420px) */
 @media (max-width: 420px) {
     .safira-mobilebar {
         gap: 9px;
@@ -522,6 +814,21 @@ img {
     }
 }
 
+/* Matikan Hover Terangkat pada Layar Sentuh (HP) */
+@media (hover: none) and (pointer: coarse) {
+    button:not(:disabled):hover,
+    #app-content article:hover,
+    #app-content .cursor-pointer:hover,
+    #app-content .space-y-1\.5 > div.grid:hover,
+    #app-content tbody tr:hover {
+        transform: none !important;
+    }
+}
+
+/* =========================================================
+   11. ACCESSIBILITY (REDUCED MOTION)
+   ========================================================= */
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -530,345 +837,5 @@ img {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
-    }
-}
-/* =========================================================
-   SMOOTH MICRO-INTERACTIONS (TANPA MENGUBAH PALET WARNA)
-   ========================================================= */
-
-:root {
-    --safira-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
-    --safira-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* 1. Tombol & Tautan Interaktif */
-button,
-a,
-[role="menuitem"] {
-    transition:
-        transform 0.22s var(--safira-ease-smooth),
-        box-shadow 0.22s var(--safira-ease-smooth),
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        opacity 0.2s ease;
-}
-
-button:not(:disabled):hover {
-    transform: translateY(-1.5px);
-}
-
-button:not(:disabled):active,
-a:active {
-    transform: translateY(0) scale(0.97) !important;
-    transition-duration: 0.08s;
-}
-
-/* 2. Menu Sidebar (Geser Halus + Ikon Sedikit Memantul) */
-#app-sidebar .menu-item {
-    transition:
-        background-color 0.22s ease,
-        color 0.22s ease,
-        box-shadow 0.24s var(--safira-ease-smooth),
-        transform 0.24s var(--safira-ease-smooth);
-}
-
-#app-sidebar .menu-item i {
-    transition: transform 0.26s var(--safira-ease-bounce);
-}
-
-#app-sidebar .menu-item:hover:not(.is-active):not(.bg-brand-purple) {
-    transform: translateX(4px);
-}
-
-#app-sidebar .menu-item:hover i {
-    transform: scale(1.12);
-}
-
-#app-sidebar .menu-item:active {
-    transform: scale(0.98) !important;
-}
-
-/* 3. Kartu & Elemen Klik (Dashboard, Catatan, Target, Jadwal) */
-#app-content article,
-#app-content .cursor-pointer {
-    transition:
-        transform 0.26s var(--safira-ease-smooth),
-        box-shadow 0.26s var(--safira-ease-smooth),
-        background-color 0.2s ease,
-        filter 0.2s ease;
-    will-change: transform;
-}
-
-#app-content article:hover,
-#app-content .cursor-pointer:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 26px rgba(73, 43, 120, 0.09);
-}
-
-#app-content .cursor-pointer:active {
-    transform: translateY(-1px) scale(0.985) !important;
-    transition-duration: 0.08s;
-}
-
-/* 4. Input, Select & Textarea */
-input,
-select,
-textarea {
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.22s var(--safira-ease-smooth),
-        background-color 0.2s ease,
-        transform 0.2s var(--safira-ease-smooth);
-}
-
-select:hover:not(:disabled),
-input:hover:not(:disabled):not(:focus),
-textarea:hover:not(:disabled):not(:focus) {
-    box-shadow: 0 4px 12px rgba(73, 43, 120, 0.06);
-}
-
-/* 5. Baris Tabel Jadwal */
-#app-content tbody tr {
-    transition: background-color 0.18s ease, transform 0.2s var(--safira-ease-smooth);
-}
-
-/* 6. Transisi Masuk Halaman Lebih Mulus */
-@keyframes safiraPageEnter {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#app-content > * {
-    animation: safiraPageEnter 0.28s var(--safira-ease-smooth) both;
-}
-
-/* =========================================================
-   SOFT & WARM GLOW LAYER (PALET WARNA TETAP ASLI)
-   ========================================================= */
-
-:root {
-    --safira-glow-warm: rgba(255, 232, 209, 0.58);
-    --safira-glow-cream: rgba(255, 245, 228, 0.72);
-    --safira-glow-blue: rgba(8, 100, 247, 0.28);
-}
-
-/* 1. Cahaya Hangat Halus di Banner Hero & Sidebar */
-.hero-gradient {
-    box-shadow:
-        0 10px 30px rgba(73, 43, 120, 0.06),
-        0 0 32px rgba(255, 232, 209, 0.42),
-        inset 0 0 28px rgba(255, 248, 236, 0.55) !important;
-}
-
-#app-sidebar.safira-sidebar {
-    box-shadow:
-        6px 0 28px rgba(71, 45, 124, 0.06),
-        2px 0 24px rgba(255, 232, 209, 0.32);
-}
-
-/* 2. Pendar Lembut pada Menu Sidebar yang Aktif & Hover */
-#app-sidebar .menu-item.is-active,
-#app-sidebar .menu-item.bg-brand-purple {
-    box-shadow:
-        0 8px 20px var(--safira-glow-blue),
-        0 0 18px rgba(255, 240, 224, 0.45) !important;
-}
-
-#app-sidebar .menu-item:hover:not(.is-active):not(.bg-brand-purple) {
-    box-shadow:
-        0 4px 16px rgba(255, 245, 228, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
-}
-
-/* 3. Warm Halo pada Kartu & Elemen Klik saat Hover */
-#app-content article:hover,
-#app-content .cursor-pointer:hover {
-    box-shadow:
-        0 12px 26px rgba(73, 43, 120, 0.08),
-        0 0 24px var(--safira-glow-warm),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-}
-
-/* 4. Pendar Lembut pada Tombol saat Hover */
-button:not(:disabled):hover {
-    box-shadow:
-        0 8px 20px rgba(73, 43, 120, 0.08),
-        0 0 18px var(--safira-glow-warm);
-}
-
-button[class*="bg-[#0864F7]"]:not(:disabled):hover,
-button[class*="bg-[#1D63DC]"]:not(:disabled):hover {
-    box-shadow:
-        0 8px 22px var(--safira-glow-blue),
-        0 0 20px rgba(255, 236, 214, 0.55);
-}
-
-/* 5. Input & Select Berpendar Hangat saat Aktif/Fokus */
-input:focus,
-select:focus,
-textarea:focus {
-    box-shadow:
-        0 0 0 3px rgba(220, 202, 247, 0.45),
-        0 0 18px var(--safira-glow-cream) !important;
-}
-
-/* 6. Pendar Bintang & Kilauan Dekorasi (Sangat Halus) */
-@keyframes safiraWarmTwinkle {
-    0%, 100% {
-        filter: drop-shadow(0 0 4px rgba(255, 236, 186, 0.55));
-        opacity: 0.82;
-    }
-    50% {
-        filter: drop-shadow(0 0 9px rgba(255, 226, 168, 0.9));
-        opacity: 1;
-    }
-}
-
-img[src*="bintang"],
-img[src*="kilauan"] {
-    animation: safiraWarmTwinkle 4.5s ease-in-out infinite;
-}
-
-/* =========================================================
-   SMOOTH & WARM GLOW UNTUK LIST TUGAS & TABEL JADWAL
-   ========================================================= */
-
-/* 1. Baris Daftar Tugas (tugas.js) */
-#app-content .space-y-1\.5 > div.grid {
-    transition:
-        transform 0.24s var(--safira-ease-smooth),
-        box-shadow 0.24s var(--safira-ease-smooth),
-        filter 0.2s ease;
-    will-change: transform;
-}
-
-#app-content .space-y-1\.5 > div.grid:hover {
-    position: relative;
-    z-index: 2;
-    transform: translateY(-2px);
-    box-shadow:
-        0 10px 22px rgba(73, 43, 120, 0.07),
-        0 0 22px var(--safira-glow-warm),
-        inset 0 1px 0 rgba(255, 255, 255, 0.85);
-}
-
-/* Efek garis aksen kiri saat baris tugas di-hover */
-#app-content .space-y-1\.5 > div.grid > span.rounded-r-full {
-    transition: width 0.22s var(--safira-ease-smooth), box-shadow 0.22s ease;
-}
-
-#app-content .space-y-1\.5 > div.grid:hover > span.rounded-r-full {
-    width: 8px;
-}
-
-/* 2. Baris Tabel Jadwal Mingguan (jadwal.js) */
-#app-content tbody tr {
-    transition:
-        background-color 0.22s ease,
-        box-shadow 0.24s var(--safira-ease-smooth),
-        transform 0.24s var(--safira-ease-smooth);
-}
-
-#app-content tbody tr:hover {
-    position: relative;
-    z-index: 2;
-    transform: translateX(3px);
-    box-shadow:
-        inset 4px 0 0 rgba(8, 100, 247, 0.18),
-        inset 0 0 24px rgba(255, 232, 209, 0.5),
-        0 4px 14px rgba(73, 43, 120, 0.05);
-}
-
-/* 3. Tombol Aksi (Edit & Hapus) di dalam Daftar Tugas & Jadwal */
-#app-content .space-y-1\.5 > div.grid button:hover,
-#app-content tbody tr button:hover {
-    transform: translateY(-1.5px) scale(1.08);
-}
-/* =========================================================
-   CLEAR CONTAINER BORDERS (TEGAS NAMUN TETAP LEMBUT)
-   ========================================================= */
-
-:root {
-    --safira-container-line: rgba(126, 91, 183, 0.28);
-    --safira-container-line-hover: rgba(126, 91, 183, 0.44);
-    --safira-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-}
-
-/* 1. Pembatas Sidebar dengan Area Konten */
-#app-sidebar.safira-sidebar {
-    border-right: 1.5px solid rgba(117, 100, 155, 0.28);
-}
-
-/* 2. Container Utama, Banner, Panel & Kartu Statistik */
-#app-content section[class*="border"],
-#app-content div[class*="border-white"],
-#login-container main[class*="border-white"],
-#login-container section[class*="border-white"] {
-    border-color: var(--safira-container-line) !important;
-    box-shadow:
-        var(--safira-inner-highlight),
-        0 6px 20px rgba(73, 43, 120, 0.06);
-}
-
-/* 3. Kartu Catatan, Target Belajar, & Jadwal Hari Ini */
-#app-content article {
-    border-color: var(--safira-container-line) !important;
-    box-shadow:
-        var(--safira-inner-highlight),
-        0 4px 16px rgba(73, 43, 120, 0.055);
-}
-
-#app-content article:hover,
-#app-content .cursor-pointer:hover {
-    border-color: var(--safira-container-line-hover) !important;
-}
-
-/* 4. Baris Daftar Tugas & Tabel Jadwal */
-#app-content .space-y-1\.5 > div.grid {
-    border-color: rgba(126, 91, 183, 0.24) !important;
-}
-
-#app-content .space-y-1\.5 > div.grid:hover {
-    border-color: var(--safira-container-line-hover) !important;
-}
-
-#app-content tbody tr {
-    border-bottom-color: rgba(126, 91, 183, 0.2) !important;
-}
-
-/* 5. Garis Input, Select & Textarea Sedikit Lebih Jelas */
-#app-content input,
-#app-content select,
-#app-content textarea,
-#login-container input {
-    border-color: rgba(126, 91, 183, 0.34);
-}
-
-/* =========================================================
-   SIDEBAR FIT-TO-SCREEN (TANPA SCROLL, KELUAR SELALU TAMPAK)
-   ========================================================= */
-
-#app-sidebar #nav-menu {
-    gap: 4px !important;
-}
-
-#app-sidebar .menu-item {
-    min-height: 42px !important;
-    padding: 8px 14px !important;
-    font-size: 14.5px !important;
-}
-
-/* Jika layar laptop/jendela browser sangat pendek, sembunyikan ilustrasi tengah
-   agar kutipan dan tombol Keluar tidak pernah terpotong */
-@media (max-height: 640px) {
-    #app-sidebar .safira-sidebar-illust {
-        display: none !important;
     }
 }
