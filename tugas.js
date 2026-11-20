@@ -329,42 +329,62 @@ function getDataTugasTerfilter() {
 // ============================================================
 
 function renderHeaderTugas() {
+    const profil = typeof safiraProfileData !== "undefined"
+        ? safiraProfileData
+        : { full_name: "Safira", email: "safira@example.com", semester: "3" };
+
+    const nama = escapeHTMLTugas(profil.full_name || "Safira");
+    const email = escapeHTMLTugas(profil.email || "safira@example.com");
+    const semester = escapeHTMLTugas(profil.semester || "3");
+    const avatarUrl = typeof getSafiraAvatarUrl === "function" ? getSafiraAvatarUrl() : TUGAS_ASSETS.avatar;
+
     return `
-        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 class="text-[32px] font-extrabold leading-tight tracking-[-0.03em] text-[#24104F] md:text-[40px]">
+        <header class="relative z-30 mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 class="text-[29px] font-black leading-tight tracking-[-0.04em] text-[#24104F] sm:text-[36px]">
                 Tugas
             </h2>
 
-            <div class="relative flex items-center gap-4 md:gap-6">
-                <span class="whitespace-nowrap text-[14px] font-medium text-[#24104F] md:text-[16px]">
+            <div class="relative flex items-center justify-between gap-3 sm:justify-end sm:gap-5">
+                <span class="hidden whitespace-nowrap border-r border-[#CDBBEA] pr-5 text-[13px] font-medium text-[#24104F] sm:block sm:text-[15px]">
                     ${escapeHTMLTugas(formatTanggalHeaderTugas())}
                 </span>
 
-                <span class="hidden h-8 w-px bg-[#CDBBEA] sm:block"></span>
-
-                <button type="button" onclick="toggleProfileDropdownTugas()" class="relative z-[52] flex items-center gap-3 rounded-full p-1 transition-colors hover:bg-white/30">
-                    <img src="${TUGAS_ASSETS.avatar}" alt="Foto profil Safira" class="h-10 w-10 rounded-full border-2 border-[#D9C3F5] object-cover shadow-sm">
-                    <span class="font-bold text-[#24104F]">
-                        Safira
-                        <i id="profile-dropdown-tugas-icon" class="fa-solid fa-chevron-down ml-1 text-xs text-[#5D4A86] transition-transform"></i>
+                <button
+                    id="profile-dropdown-trigger"
+                    type="button"
+                    aria-label="Buka menu profil ${nama}"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="profile-dropdown"
+                    onclick="toggleProfileDropdown()"
+                    class="relative z-50 flex items-center gap-2 rounded-full p-1 transition-colors hover:bg-white/40 sm:gap-3"
+                >
+                    <img data-safira-avatar="true" src="${avatarUrl}" alt="Foto profil ${nama}" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#D9C3F5] bg-[#E9D5FF] object-cover shadow-sm sm:h-11 sm:w-11">
+                    <span class="flex max-w-[150px] items-center gap-1.5 truncate text-[14px] font-bold text-[#24104F] sm:text-[15px]">
+                        <span class="truncate">${nama}</span>
+                        <i id="profile-dropdown-icon" class="fa-solid fa-chevron-down shrink-0 text-[11px] text-[#5D4A86] transition-transform"></i>
                     </span>
                 </button>
 
-                <div id="profile-dropdown-tugas-overlay" onclick="closeProfileDropdownTugas()" class="fixed inset-0 z-50 hidden"></div>
+                <div id="profile-dropdown-overlay" onclick="closeProfileDropdown()" class="fixed inset-0 z-40 hidden" aria-hidden="true"></div>
 
-                <div id="profile-dropdown-tugas" class="absolute right-0 top-14 z-[53] hidden w-72 origin-top-right overflow-hidden rounded-3xl border border-[#E9DDF7] bg-[#FFFCFF] shadow-xl transition-all md:w-80">
-                    <div class="flex items-center gap-4 border-b border-[#F0E7F8] p-6">
-                        <img src="${TUGAS_ASSETS.avatar}" alt="Foto profil Safira" class="h-14 w-14 rounded-full border-2 border-[#E5D4F7] object-cover shadow-sm">
-                        <div>
-                            <h4 class="text-lg font-bold text-[#2A1854]">Safira</h4>
-                            <p class="text-xs font-medium text-[#74658F]">Mahasiswa &bull; Semester 3</p>
-                            <p class="mt-1 text-[11px] text-[#9587AD]">safira@example.com</p>
+                <div id="profile-dropdown" role="menu" class="absolute right-0 top-14 z-50 hidden w-[min(320px,calc(100vw-32px))] origin-top-right overflow-hidden rounded-3xl border border-[#E9DDF7] bg-[#FFFCFF] shadow-xl">
+                    <div class="flex items-center gap-4 border-b border-[#F0E7F8] p-5 sm:p-6">
+                        <img data-safira-avatar="true" src="${avatarUrl}" alt="" class="h-14 w-14 shrink-0 rounded-full border-2 border-[#E5D4F7] bg-[#E9D5FF] object-cover shadow-sm">
+                        <div class="min-w-0">
+                            <h4 class="truncate text-lg font-bold text-[#2A1854]">${nama}</h4>
+                            <p class="text-xs font-medium text-[#74658F]">Mahasiswa • Semester ${semester}</p>
+                            <p class="mt-1 truncate text-[11px] text-[#9587AD]">${email}</p>
                         </div>
                     </div>
+
                     <div class="p-3">
-                        <button onclick="closeProfileDropdownTugas(); navigate('profil')" class="flex w-full items-center justify-between rounded-xl px-4 py-3 font-medium text-[#49376D] transition-colors hover:bg-[#F5EEFC]">
+                        <button type="button" role="menuitem" onclick="closeProfileDropdown(); navigate('profil')" class="flex w-full items-center justify-between rounded-xl px-4 py-3 font-medium text-[#49376D] transition-colors hover:bg-[#F5EEFC]">
                             <span class="flex items-center gap-3"><i class="fa-regular fa-user text-lg"></i><span>Lihat Profil</span></span>
                             <i class="fa-solid fa-chevron-right text-xs text-[#9A8AB4]"></i>
+                        </button>
+                        <button type="button" role="menuitem" onclick="closeProfileDropdown(); logout()" class="mt-1 flex w-full items-center gap-3 rounded-xl px-4 py-3 font-medium text-red-500 transition-colors hover:bg-red-50">
+                            <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i><span>Keluar</span>
                         </button>
                     </div>
                 </div>
