@@ -328,36 +328,32 @@ function renderBannerProgres() {
 
 function renderRingkasanProgres(targetTercapai, totalTarget) {
 
-    // Data tugas diambil dari modul tugas.js agar ringkasan selalu sinkron.
-    // Script tugas.js dimuat lebih dahulu oleh index.html.
-    const dataTugas =
-        typeof daftarTugas !== "undefined" && Array.isArray(daftarTugas)
-            ? daftarTugas
-            : [];
+    let totalSemuaLangkah = 0;
+    let totalLangkahSelesai = 0;
 
-    const jumlahTugas = dataTugas.length;
+    daftarTarget.forEach(target => {
+        const langkah = Array.isArray(target.langkah) ? target.langkah : [];
+        totalSemuaLangkah += langkah.length;
+        totalLangkahSelesai += langkah.filter(item => item.selesai).length;
+    });
 
-    const jumlahTugasSelesai = dataTugas.filter(
-        item => item.status === "Selesai"
-    ).length;
-
-    const persentaseTugas = jumlahTugas > 0
-        ? Math.round((jumlahTugasSelesai / jumlahTugas) * 100)
+    const persentaseTarget = totalSemuaLangkah > 0
+        ? Math.round((totalLangkahSelesai / totalSemuaLangkah) * 100)
         : 0;
 
-    const keteranganTugas = jumlahTugas > 0
-        ? `${jumlahTugasSelesai} dari ${jumlahTugas} tugas selesai`
-        : "Belum ada tugas yang tercatat.";
+    const keteranganTarget = totalSemuaLangkah > 0
+        ? `${totalLangkahSelesai} dari ${totalSemuaLangkah} langkah belajar selesai`
+        : "Belum ada langkah target yang tercatat.";
 
     return `
         <section class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-[1.45fr_1fr]">
 
-            <!-- Progres tugas -->
+            <!-- Progres target belajar -->
 
             <div class="relative flex min-h-[160px] items-center gap-5 overflow-hidden rounded-[22px] border border-white/90 bg-gradient-to-br from-[#F1F1FF] to-[#EAE9FF] p-5 shadow-sm sm:gap-7 sm:p-6">
 
                 <div class="relative z-10 flex h-[74px] w-[74px] shrink-0 items-center justify-center rounded-[19px] border border-[#DDE4FF] bg-[#E3E9FF] text-[31px] text-[#0864F7] sm:h-[82px] sm:w-[82px]">
-                    <i class="fa-regular fa-rectangle-list"></i>
+                    <i class="fa-solid fa-chart-line"></i>
                 </div>
 
                 <div class="relative z-10 min-w-0 flex-1">
@@ -365,40 +361,35 @@ function renderRingkasanProgres(targetTercapai, totalTarget) {
                     <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
 
                         <p class="text-[16px] font-extrabold text-[#211044] sm:text-[18px]">
-                            Progres Tugas
+                            Progres Target Belajar
                         </p>
 
-                        <button
-                            type="button"
-                            onclick="navigate('tugas')"
-                            class="inline-flex items-center gap-2 text-[13px] font-bold text-[#0864F7] transition-colors hover:text-blue-800 sm:text-[15px]"
-                        >
-                            Lihat Tugas
-                            <i class="fa-solid fa-chevron-right text-[11px]"></i>
-                        </button>
+                        <span class="rounded-full bg-[#E3E9FF] px-3 py-1 text-[12px] font-bold text-[#0864F7]">
+                            ${totalTarget} target aktif
+                        </span>
 
                     </div>
 
                     <h3 class="mb-1 text-[42px] font-black leading-none tracking-[-0.05em] text-[#211044] sm:text-[48px]">
-                        ${persentaseTugas}%
+                        ${persentaseTarget}%
                     </h3>
 
                     <div
                         class="mb-2.5 h-[12px] w-full overflow-hidden rounded-full bg-[#D6D9F1]"
                         role="progressbar"
-                        aria-label="Progres penyelesaian tugas"
+                        aria-label="Progres penyelesaian target belajar"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        aria-valuenow="${persentaseTugas}"
+                        aria-valuenow="${persentaseTarget}"
                     >
                         <div
                             class="h-full rounded-full bg-[#1767F8] transition-all duration-500"
-                            style="width: ${persentaseTugas}%"
+                            style="width: ${persentaseTarget}%"
                         ></div>
                     </div>
 
                     <p class="text-[13px] font-medium text-[#66518F] sm:text-[14px]">
-                        ${keteranganTugas}
+                        ${keteranganTarget}
                     </p>
 
                 </div>

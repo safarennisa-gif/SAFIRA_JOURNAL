@@ -743,6 +743,9 @@ function renderTugas() {
     const totalTugas = daftarTugas.length;
     const tugasSelesai = daftarTugas.filter(item => item.status === "Selesai").length;
     const tugasAktif = totalTugas - tugasSelesai;
+    const persentaseTugas = totalTugas > 0
+        ? Math.round((tugasSelesai / totalTugas) * 100)
+        : 0;
 
     const dataTerfilter = getDataTugasTerfilter();
     const totalHalaman = Math.max(1, Math.ceil(dataTerfilter.length / TUGAS_PER_HALAMAN));
@@ -822,6 +825,35 @@ function renderTugas() {
                     </div>
                     <i class="fa-regular fa-circle-check absolute -bottom-1 right-4 text-[58px] text-[#9CD8A7]/45"></i>
                     <img src="${TUGAS_ASSETS.flowerPink}" alt="" class="pointer-events-none absolute -right-1 -top-1 w-12 opacity-55">
+                </div>
+            </section>
+
+            <!-- PROGRES PENYELESAIAN TUGAS -->
+            <section class="relative mb-4 flex flex-col gap-4 overflow-hidden rounded-[17px] border border-[#D5E4FA] bg-gradient-to-r from-[#F1F1FF] via-[#EEF2FF] to-[#E6EEFF] px-5 py-4 shadow-sm sm:flex-row sm:items-center sm:gap-6">
+                <div class="relative z-10 flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-[15px] border border-[#DDE4FF] bg-[#DCE7FF] text-[26px] text-[#0864F7]">
+                    <i class="fa-regular fa-rectangle-list"></i>
+                </div>
+
+                <div class="relative z-10 min-w-0 flex-1">
+                    <div class="mb-1.5 flex items-baseline justify-between gap-2">
+                        <p class="text-[15px] font-extrabold text-[#24104F] md:text-[16px]">Progres Penyelesaian Tugas</p>
+                        <span class="text-[22px] font-black leading-none text-[#0864F7] md:text-[26px]">${persentaseTugas}%</span>
+                    </div>
+
+                    <div
+                        class="mb-2 h-[10px] w-full overflow-hidden rounded-full bg-[#D6D9F1]"
+                        role="progressbar"
+                        aria-label="Progres penyelesaian tugas"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="${persentaseTugas}"
+                    >
+                        <div class="h-full rounded-full bg-[#1767F8] transition-all duration-500" style="width: ${persentaseTugas}%"></div>
+                    </div>
+
+                    <p class="text-[12.5px] font-medium text-[#5E4D85] md:text-[13px]">
+                        ${totalTugas > 0 ? `${tugasSelesai} dari ${totalTugas} tugas telah diselesaikan.` : "Belum ada tugas yang tercatat."}
+                    </p>
                 </div>
             </section>
 
