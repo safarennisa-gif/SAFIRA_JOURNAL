@@ -103,13 +103,12 @@
             <!-- ========================================================= -->
             <!-- 1. BAGIAN ATAS: LOGO & JUDUL (TERPUSAT)                   -->
             <!-- ========================================================= -->
-            <div class="pt-10 pb-5 px-6 flex flex-col items-center justify-center text-center relative z-10">
-                <div class="relative mb-2 flex justify-center items-center">
-                    <!-- translate-x-2 menyeimbangkan bunga di kanan buku agar buku tepat di tengah teks SAFIRA -->
-                    <img src="aset/buku-2.png" alt="Logo SAFIRA" class="w-20 h-auto object-contain transform translate-x-2 drop-shadow-sm">
+            <div class="pt-5 pb-3 px-6 flex flex-col items-center justify-center text-center relative z-10 shrink-0">
+                <div class="relative mb-1.5 flex justify-center items-center">
+                    <img src="aset/buku-2.png" alt="Logo SAFIRA" class="w-14 h-auto object-contain transform translate-x-1.5 drop-shadow-sm">
                 </div>
-                <h1 class="text-[28px] font-black tracking-tight text-[#1E1B4B] leading-none">SAFIRA</h1>
-                <p class="text-[13.5px] font-semibold text-[#1E1B4B]/75 mt-1.5">Academic Journal</p>
+                <h1 class="text-[24px] font-black tracking-tight text-[#1E1B4B] leading-none">SAFIRA</h1>
+                <p class="text-[12.5px] font-semibold text-[#1E1B4B]/75 mt-1">Academic Journal</p>
             </div>
 
             <!-- ========================================================= -->
@@ -137,52 +136,42 @@
             </nav>
 
             <!-- ========================================================= -->
-            <!-- 3. BAGIAN BAWAH: ILUSTRASI TENGAH, KUTIPAN & KELUAR       -->
+            <!-- 3. BAGIAN BAWAH: ILUSTRASI FLEKSIBEL, KUTIPAN & KELUAR    -->
             <!-- ========================================================= -->
-            <div class="flex-1 flex flex-col justify-between px-5 pb-7 pt-2 relative z-10">
+            <div class="flex-1 min-h-0 flex flex-col justify-between px-5 pb-4 pt-1 relative z-10">
                 
-                <!-- Wadah Ilustrasi Buku & Bunga (Berada Tepat di Tengah Sidebar) -->
-                <div class="flex-1 flex items-center justify-center w-full my-auto pointer-events-none">
-                    <div class="relative w-52 h-40 flex items-center justify-center mx-auto">
-                        
-                        <!-- Tangkai Bunga Peach di Sisi Kiri Buku -->
-                        <img src="aset/tangkai-sidebar.png" alt="Tangkai Bunga Kiri" class="absolute -bottom-3 -left-2 w-24 object-contain opacity-95 transform -rotate-6 z-0">
-                        
-                        <!-- Buku Catatan Pink & Pensil di Tengah -->
-                        <img src="aset/buku-4.png" alt="Buku Catatan" class="w-28 object-contain relative z-10 transform -rotate-3 translate-x-2 -translate-y-2 drop-shadow-sm">
-                        
-                        <!-- Ranting Lavender Melengkung di Kanan Bawah Buku -->
-                        <img src="aset/lavender.png" alt="Lavender Kanan" class="absolute -bottom-3 right-0 w-24 object-contain opacity-95 transform rotate-[112deg] scale-x-[-1] z-20">
-                        
-                        <!-- Aksen Garis Miring Halus & Bintang di Bawah Buku -->
-                        <div class="absolute bottom-2 left-12 w-24 h-[1.5px] bg-[#1E1B4B]/20 transform -rotate-[18deg] rounded-full z-10"></div>
-                        <img src="aset/bintang.png" alt="" class="absolute bottom-1 left-20 w-3 h-3 opacity-85 z-20">
+                <!-- Wadah Ilustrasi Buku & Bunga (Otomatis menyusut di layar pendek) -->
+                <div class="safira-sidebar-illust flex-1 min-h-0 flex items-center justify-center w-full my-auto pointer-events-none overflow-hidden">
+                    <div class="relative w-40 h-28 flex items-center justify-center mx-auto">
+                        <img src="aset/tangkai-sidebar.png" alt="Tangkai Bunga Kiri" class="absolute -bottom-2 -left-1 w-20 object-contain opacity-95 transform -rotate-6 z-0">
+                        <img src="aset/buku-4.png" alt="Buku Catatan" class="w-22 max-h-24 object-contain relative z-10 transform -rotate-3 translate-x-1.5 -translate-y-1 drop-shadow-sm">
+                        <img src="aset/lavender.png" alt="Lavender Kanan" class="absolute -bottom-2 right-0 w-20 object-contain opacity-95 transform rotate-[112deg] scale-x-[-1] z-20">
+                        <div class="absolute bottom-1.5 left-10 w-20 h-[1.5px] bg-[#1E1B4B]/20 transform -rotate-[18deg] rounded-full z-10"></div>
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-0.5 left-16 w-2.5 h-2.5 opacity-85 z-20">
                     </div>
                 </div>
 
-                <!-- Blok Kutipan Motivasi & Tombol Keluar -->
-                <div class="w-full relative z-20">
-                    <!-- Kotak Kutipan Motivasi -->
-                    <div class="relative py-3.5 mb-2 border-y border-white/45 text-center mx-1">
-                        <img src="aset/bintang.png" alt="" class="absolute top-2 left-3 w-2.5 h-2.5 opacity-70 pointer-events-none">
-                        <img src="aset/bintang.png" alt="" class="absolute bottom-1.5 left-1.5 w-3.5 h-3.5 opacity-85 pointer-events-none">
-                        <img src="aset/bintang.png" alt="" class="absolute bottom-2 right-2 w-3.5 h-3.5 opacity-85 pointer-events-none">
-                        <span class="absolute top-2.5 right-4 w-1.5 h-1.5 rounded-full bg-white/80 pointer-events-none"></span>
-                        <p class="text-[13px] font-semibold text-[#1E1B4B]/85 leading-relaxed tracking-wide">
+                <!-- Blok Kutipan Motivasi & Tombol Keluar (Selalu terlihat di bawah) -->
+                <div class="w-full relative z-20 shrink-0">
+                    <div class="relative py-2 mb-1.5 border-y border-white/45 text-center mx-1">
+                        <img src="aset/bintang.png" alt="" class="absolute top-1.5 left-3 w-2 h-2 opacity-70 pointer-events-none">
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-1 left-1.5 w-3 h-3 opacity-85 pointer-events-none">
+                        <img src="aset/bintang.png" alt="" class="absolute bottom-1.5 right-2 w-3 h-3 opacity-85 pointer-events-none">
+                        <span class="absolute top-2 right-4 w-1.5 h-1.5 rounded-full bg-white/80 pointer-events-none"></span>
+                        <p class="text-[12px] font-semibold text-[#1E1B4B]/85 leading-snug tracking-wide">
                             Sedikit demi sedikit,<br>jadi berarti.
                         </p>
                     </div>
 
                     <!-- Tombol Keluar -->
-                    <a href="javascript:void(0)" onclick="logout(); closeSafiraSidebar()" class="flex items-center gap-3.5 px-4 py-2.5 text-[#1E1B4B] hover:bg-white/50 hover:text-red-600 rounded-2xl font-semibold transition-colors group relative z-20 text-[15px]">
+                    <a href="javascript:void(0)" onclick="logout(); closeSafiraSidebar()" class="flex items-center gap-3 px-4 py-2 text-[#1E1B4B] hover:bg-white/50 hover:text-red-600 rounded-2xl font-bold transition-colors group relative z-20 text-[14.5px]">
                         <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center text-base group-hover:text-red-600"></i> Keluar
                     </a>
                 </div>
 
                 <!-- Hiasan Tangkai Bunga Pojok Kanan Bawah Sidebar -->
-                <img src="aset/tangkai-sidebar.png" alt="Bunga Pojok Bawah" class="absolute -bottom-4 -right-1 w-24 opacity-95 pointer-events-none z-10 transform rotate-[30deg]">
+                <img src="aset/tangkai-sidebar.png" alt="Bunga Pojok Bawah" class="absolute -bottom-4 -right-1 w-20 opacity-95 pointer-events-none z-10 transform rotate-[30deg]">
             </div>
-        </aside>
 
         <!-- AREA KONTEN DINAMIS -->
         <main id="app-content" class="safira-main flex-1 h-full overflow-y-auto">
